@@ -7,8 +7,13 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" media="screen" href="main.css">
     </head>
     <body>
+        <div class="container">
+            <h1 id="temp"></h1>
+            
+        </div>
 
 
         <script>
@@ -26,6 +31,7 @@
                 console.log(response);
                 console.log(response.main);
                 console.log(response.main.temp);
+                $("#temp").prepend("The temperature in Seattle is: " + response.main.temp + " degrees F");
             })
             
         
