@@ -3,10 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Weather API Test</title>
+        <title>Testing LIFX api</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" media="screen" href="main.css">
     </head>
@@ -19,22 +18,28 @@
 
         <script>
             
-            //var queryURL = "http://api.openweathermap.org/data/2.5/forecast?zip=98122&APPID=47cacca1c5c7874804605afd3db23bc5 ";
-            //weather? gets current weather
-            // zip=98122
-            //units=imperial to retrieve fahrenheit         
-            var queryURL = "http://api.openweathermap.org/data/2.5/weather?zip=98122&units=imperial&APPID=47cacca1c5c7874804605afd3db23bc5 ";  
+           /*  
+            var queryURL = "https://api.lifx.com/v1/lights/all";  
             $.ajax({
                 url: queryURL,
                 method: "GET"
             })
             .then(function(response){
                 console.log(response);
-                console.log(response.main);
-                console.log(response.main.temp);
-                $("#temp").prepend("The temperature in Seattle is: " + response.main.temp + " degrees F");
+                $("#temp").prepend("LIFX says: " + response);
             })
-            
+             */
+
+            $.ajax({
+                url: 'https://api.lifx.com/v1/lights/all',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer cd98e1a574aeb1bb0a18dea42aa3a2ed817ac938425df6acaecd1547d3253e58")
+                    console.log(xhr);
+                }, success: function(data){
+                    alert(data);
+                    //process the JSON data etc
+                }
+            })
         
         </script>
 
