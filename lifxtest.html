@@ -34,18 +34,13 @@
                 url: 'https://api.lifx.com/v1/lights/all',
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader("Authorization", "Bearer cd98e1a574aeb1bb0a18dea42aa3a2ed817ac938425df6acaecd1547d3253e58")
-                    console.log(xhr);
-                    console.log(xhr.readyState);
-                    console.log(xhr.state);
+                    
+                }
+            }).then(function(res) {
+                console.log(res);
+                console.log(res[0].color);
+                console.log(res[0].effect);
 
-                    console.log(xhr.setRequestHeader);
-
-                    console.log(JSON.stringify(xhr.responseJSON));
-                }/* 
-                , success: function(data){
-                    alert(data);
-                    //process the JSON data etc
-                } */
             })
         
         </script>
