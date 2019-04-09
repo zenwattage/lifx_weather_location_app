@@ -1,0 +1,50 @@
+<!DOCTYPE>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Testing LIFX api</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    </head>
+    <body>
+        <div class="container">
+            <h1 id="temp"></h1>
+            
+        </div>
+
+
+        <script>
+            
+           /*  
+            var queryURL = "https://api.lifx.com/v1/lights/all";  
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            })
+            .then(function(response){
+                console.log(response);
+                $("#temp").prepend("LIFX says: " + response);
+            })
+             */
+
+            $.ajax({
+                url: 'https://api.lifx.com/v1/lights/all',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer cd98e1a574aeb1bb0a18dea42aa3a2ed817ac938425df6acaecd1547d3253e58")
+                    
+                }
+            }).then(function(res) {
+                console.log(res);
+                console.log(res[0].color);
+                console.log(res[0].effect);
+
+            })
+        
+        </script>
+
+        
+    </body>
+</html>
