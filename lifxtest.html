@@ -11,25 +11,11 @@
     </head>
     <body>
         <div class="container">
-            <h1 id="temp"></h1>
-            
+            <h1 id="temp"></h1>            
         </div>
 
-
         <script>
-            
-           /*  
-            var queryURL = "https://api.lifx.com/v1/lights/all";  
-            $.ajax({
-                url: queryURL,
-                method: "GET"
-            })
-            .then(function(response){
-                console.log(response);
-                $("#temp").prepend("LIFX says: " + response);
-            })
-             */
-
+            /* 
             $.ajax({
                 url: 'https://api.lifx.com/v1/lights/all',
                 beforeSend: function(xhr) {
@@ -41,10 +27,20 @@
 
                 console.log(res[0].color);
                 console.log(res[0].color.kelvin);
-               
-                
+            }) */
 
+            fetch('https://api.lifx.com/v1/lights/all')
+            .then(response => {
+                response.json()
             })
+            .then(data => {
+                console.log(data)
+            })
+            .catch(err => {
+                console.error(err)
+            });
+
+            
         
         </script>
 
