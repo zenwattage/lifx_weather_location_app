@@ -33,12 +33,19 @@
             $.ajax({
                 url: 'https://api.lifx.com/v1/lights/all',
                 beforeSend: function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Bearer TOKENHERE")
+                    xhr.setRequestHeader("Authorization", "Bearer cd98e1a574aeb1bb0a18dea42aa3a2ed817ac938425df6acaecd1547d3253e58")
                     console.log(xhr);
-                }, success: function(data){
+                    console.log(xhr.readyState);
+                    console.log(xhr.state);
+
+                    console.log(xhr.setRequestHeader);
+
+                    console.log(JSON.stringify(xhr.responseJSON));
+                }/* 
+                , success: function(data){
                     alert(data);
                     //process the JSON data etc
-                }
+                } */
             })
         
         </script>
