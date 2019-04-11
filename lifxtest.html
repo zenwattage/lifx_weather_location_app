@@ -15,7 +15,7 @@
         </div>
 
         <script>
-            /* 
+            
             $.ajax({
                 url: 'https://api.lifx.com/v1/lights/all',
                 beforeSend: function(xhr) {
@@ -27,8 +27,46 @@
 
                 console.log(res[0].color);
                 console.log(res[0].color.kelvin);
-            }) */
+                console.log(res[0].color.hue);
+                console.log(res[0].power);
+                console.log(res[0].data);
+            })
 
+
+            
+            $.ajax({
+                url: 'https://api.lifx.com/v1/lights/state',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer cd98e1a574aeb1bb0a18dea42aa3a2ed817ac938425df6acaecd1547d3253e58")
+                
+                },
+                type: 'PUT',
+                data: {
+                    "color.kelvin": "1000"
+                }
+            })
+            
+
+
+
+
+
+          
+            // PUT /v1/lights/all/state
+/* 
+
+            {
+            "power": "on",
+            "color": "blue saturation:0.5",
+            "brightness": 0.5,
+            "duration": 5,            
+            }
+ */
+ 
+
+
+
+/* 
             fetch('https://api.lifx.com/v1/lights/all')
             .then(response => {
                 response.json()
@@ -39,8 +77,8 @@
             .catch(err => {
                 console.error(err)
             });
-
-            
+ 
+  */           
         
         </script>
 
