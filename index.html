@@ -22,8 +22,17 @@
     
 
     <div class="container ">
-        <div class="input-error text-center">
-            <p>Malformed Input</p>
+        <div>
+            <input id="pac-input"
+                class="controls"
+                type="text"
+                placeholder="Enter a location">
+        </div>
+        <div id="map"></div>
+        <div id="infowindow-content">
+            <span id="place-name"  class="title"></span><br>
+            <strong>Place ID</strong>: <span id="place-id"></span><br>
+            <span id="place-address"></span>
         </div>
         <div id='hold' class="window row justify-content-center">
             <form action="">
@@ -33,6 +42,9 @@
         </div>
     </div>
 
+    <!-- google maps api link -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPoxqZMEm0Zf9SHeQMBBhF2dUDsROvUOE&libraries=places&callback=initMap"
+        async defer></script>
     <!-- firebase link -->
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase.js"></script>
     <!-- jquery link -->
