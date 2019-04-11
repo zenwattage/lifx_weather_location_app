@@ -11,25 +11,11 @@
     </head>
     <body>
         <div class="container">
-            <h1 id="temp"></h1>
-            
+            <h1 id="temp"></h1>            
         </div>
-
 
         <script>
             
-           /*  
-            var queryURL = "https://api.lifx.com/v1/lights/all";  
-            $.ajax({
-                url: queryURL,
-                method: "GET"
-            })
-            .then(function(response){
-                console.log(response);
-                $("#temp").prepend("LIFX says: " + response);
-            })
-             */
-
             $.ajax({
                 url: 'https://api.lifx.com/v1/lights/all',
                 beforeSend: function(xhr) {
@@ -38,10 +24,67 @@
                 }
             }).then(function(res) {
                 console.log(res);
-                console.log(res[0].color);
-                console.log(res[0].effect);
 
+                console.log(res[0].color);
+                console.log(res[0].color.kelvin);
+                console.log(res[0].color.hue);
+                console.log(res[0].power);
+                //console.log(res[0].data);
             })
+
+
+            
+            $.ajax({
+                url: 'https://api.lifx.com/v1/lights/state',
+                "states": [
+                    {
+                    "selector": "[selector 1]",
+                    "power": "off"
+                    },
+                    {
+                    "selector": "[selector N]",
+                    "brightness": 0.5
+                    }
+                ],
+                "defaults": {
+                    "duration": 5.0 // all states will be applied over 5 seconds
+                }
+                
+            })
+            
+
+
+
+
+
+          
+            // PUT /v1/lights/all/state
+/* 
+
+            {
+            "power": "on",
+            "color": "blue saturation:0.5",
+            "brightness": 0.5,
+            "duration": 5,            
+            }
+ */
+ 
+
+
+
+/* 
+            fetch('https://api.lifx.com/v1/lights/all')
+            .then(response => {
+                response.json()
+            })
+            .then(data => {
+                console.log(data)
+            })
+            .catch(err => {
+                console.error(err)
+            });
+ 
+  */           
         
         </script>
 
