@@ -1,27 +1,56 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Google Maps</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+
+<head>
     <meta charset="utf-8">
-    <!-- Group CSS -->
-    <link rel="stylesheet" href="assets/style.css">
-    <!-- bootstrap -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Color Spectron-o-meter</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap Link -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <!-- jquery link -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Reset CSS -->
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <!-- Group CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+<body id='body'>
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+
+    <div class="container ">
+        <div class="input-error text-center">
+            <p>Malformed Input</p>
+        </div>
+        <div id='hold' class="window row justify-content-center">
+            <form action="">
+                <input id='input' type="text" name='city'>
+                <input id='submit' type="submit" class="btn btn-block" value="Go">
+            </form>
+        </div>
+    </div>
+
     <!-- firebase link -->
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase.js"></script>
+    <!-- jquery link -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- js link -->
+</body>
 
-  </head>
-  <body>
+
+</head>
+<body>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-  <div id="map"></div>
-  
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPoxqZMEm0Zf9SHeQMBBhF2dUDsROvUOE&libraries=places&callback=initAutocomplete"
+    <div id="map"></div>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPoxqZMEm0Zf9SHeQMBBhF2dUDsROvUOE&libraries=places&callback=initAutocomplete"
     async defer></script>
-  <!-- js link -->
-  <script src="assets/script.js"></script>
+    <!-- js link -->
+    <script src="assets/javascript/configs.js"></script>
+    <script src="assets/javascript/script.js"></script>
   </body>
 </html>

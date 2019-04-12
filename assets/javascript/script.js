@@ -1,3 +1,8 @@
+<<<<<<< HEAD:assets/javascript/script.js
+
+// Initialize Firebase
+firebase.initializeApp(fbConfig);
+=======
 var googleAPIKey = "AIzaSyCPoxqZMEm0Zf9SHeQMBBhF2dUDsROvUOE";
 var weatherAPIKey = "b0162c0944ec2d5f987eb39c7b914117";
 var units = "imperial";
@@ -5,6 +10,7 @@ var input;
 var lat;
 var lng;
 
+>>>>>>> 4e6adc137d3479787dca8a23cc6633142c63d057:assets/script.js
   
 //our input field...
 $("#pac-input").on("keydown",function search(e) {
@@ -35,19 +41,34 @@ $("#pac-input").on("keydown",function search(e) {
       //grab lattitude from google map api object
       lat = response.results[0].geometry.location.lat;
 
+<<<<<<< HEAD:assets/javascript/script.js
+  var cityQueryURL = "https://api.openweathermap.org/data/2.5/weather?q="
+     + city + "&units=" + owmConfig.units + "&appid=" 
+     + owmConfig.weatherAPIKey;
+=======
       //decimal values too long for open weather map api, so we use precision to make the decimal values smaller
       var cndLat = lat.toPrecision(5);
+>>>>>>> 4e6adc137d3479787dca8a23cc6633142c63d057:assets/script.js
 
       console.log(cndLat);
 
       lng = response.results[0].geometry.location.lng;
 
+<<<<<<< HEAD:assets/javascript/script.js
+      owmConfig.cityID = response.id;
+
+      console.log(owmConfig.cityID);
+
+      var idQueryURL = "https://api.openweathermap.org/data/2.5/weather?id=" 
+        + owmConfig.cityID + "&units=" + owmConfig.units + "&appid=" + owmConfig.weatherAPIKey;
+=======
       var cndLng = lng.toPrecision(5);
 
       console.log(cndLng);
 
       console.log("lattitude: " + cndLat);
       console.log("longitude: " + cndLng);
+>>>>>>> 4e6adc137d3479787dca8a23cc6633142c63d057:assets/script.js
 
       //open weather map api url using lattitude and longitude that we received from the google map api call
       var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + cndLat + "&lon=" + cndLng + "&units=" + units + "&appid=" + weatherAPIKey;
