@@ -1,9 +1,9 @@
 var owmConfig = {
     weatherAPIKey: "b0162c0944ec2d5f987eb39c7b914117",
     idInput: "2172797",
-    zipCodeInput,
+    zipCodeInput: "",
     units: "imperial",
-    cityID,
+    cityID: "",
 };
 
 var fbConfig = {
