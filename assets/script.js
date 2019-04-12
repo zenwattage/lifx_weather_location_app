@@ -1,68 +1,65 @@
-
+var googleAPIKey = "AIzaSyCPoxqZMEm0Zf9SHeQMBBhF2dUDsROvUOE";
 var weatherAPIKey = "b0162c0944ec2d5f987eb39c7b914117";
-var idInput = "2172797"
-var zipCodeInput;
 var units = "imperial";
-var cityID;
+var input;
+var lat;
+var lng;
 
-// Initialize Firebase
-var config = {
-    apiKey: "AIzaSyDd3BtmB_Yt1nkW8WG25orFzOW_hHm84-Y",
-    authDomain: "project1-e4ebd.firebaseapp.com",
-    databaseURL: "https://project1-e4ebd.firebaseio.com",
-    projectId: "project1-e4ebd",
-    storageBucket: "project1-e4ebd.appspot.com",
-    messagingSenderId: "404140451591"
-};
-firebase.initializeApp(config);
   
+//our input field...
+$("#pac-input").on("keydown",function search(e) {
 
-  //look into parseint() returns true if a number nan (not a number) if false
-$("#submit").on("click", function(event) {
+  //listen for key press
+  if(e.keyCode == 13) {
 
-  event.preventDefault();
+    //grab value from input field
+    input = $(this).val();
 
-  var userInput = $("#input").val().trim();
+    console.log("value of input: " + input);
 
-  console.log(userInput);
-
-  if (userInput != ""){
-    citytoID(userInput);
-  }
-  else {
-    $(".input-error").show();
-  }
-
-});
+    //google map api query using user input
+    var queryURL = "https://maps.googleapis.com/maps/api/geocode/json?&address=" + input + "&key=" + googleAPIKey;
 
 
-function citytoID (city) {
-
-  var cityQueryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=" + units + "&appid=" + weatherAPIKey;
-
-  $.ajax({
-      url: cityQueryURL,
-      method: "GET"
-  })
-      
-    .then(function(response) {
+    $.ajax({
+    url: queryURL,
+    method: "GET"
+    })
+          
+      .then(function(response) {
+    
+      console.log(queryURL);
 
       console.log(response);
 
-      cityID = response.id;
+      //grab lattitude from google map api object
+      lat = response.results[0].geometry.location.lat;
 
-      console.log(cityID);
+      //decimal values too long for open weather map api, so we use precision to make the decimal values smaller
+      var cndLat = lat.toPrecision(5);
 
-      var idQueryURL = "https://api.openweathermap.org/data/2.5/weather?id=" + cityID + "&units=" + units + "&appid=" + weatherAPIKey;
+      console.log(cndLat);
 
-        $.ajax({
-          url: idQueryURL,
+      lng = response.results[0].geometry.location.lng;
+
+      var cndLng = lng.toPrecision(5);
+
+      console.log(cndLng);
+
+      console.log("lattitude: " + cndLat);
+      console.log("longitude: " + cndLng);
+
+      //open weather map api url using lattitude and longitude that we received from the google map api call
+      var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + cndLat + "&lon=" + cndLng + "&units=" + units + "&appid=" + weatherAPIKey;
+
+      $.ajax({
+          url: coordQueryURL,
           method: "GET"
         })
           
           .then(function(response) {
     
-            console.log(idQueryURL);
+            console.log(coordQueryURL);
 
             console.log(response);
 
@@ -73,13 +70,79 @@ function citytoID (city) {
             console.log("today's low: " + response.main.temp_min);
 
             console.log("today's description: " + response.weather[0].description);
-    
-            //console.log(cityID);
+
           });
-  });
+      
+      });
+  }
 
-}
-
-$(document).ready(function () {
-  $(".input-error").hide();
 });
+
+
+function initAutocomplete() {
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 47.6062095, lng: -122.3320708},
+        zoom: 13,
+         mapTypeId: 'roadmap'
+      });
+
+      // Create the search box and link it to the UI element.
+      var input = document.getElementById('pac-input');
+      var searchBox = new google.maps.places.SearchBox(input);
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+      // Bias the SearchBox results towards current map's viewport.
+      map.addListener('bounds_changed', function() {
+        searchBox.setBounds(map.getBounds());
+      });
+
+      var markers = [];
+      // Listen for the event fired when the user selects a prediction and retrieve
+      // more details for that place.
+      searchBox.addListener('places_changed', function() {
+        var places = searchBox.getPlaces();
+        
+        if (places.length == 0) {
+          return;
+        }
+
+        // Clear out the old markers.
+        markers.forEach(function(marker) {
+          marker.setMap(null);
+        });
+        markers = [];
+
+        // For each place, get the icon, name and location.
+        var bounds = new google.maps.LatLngBounds();
+        places.forEach(function(place) {
+          if (!place.geometry) {
+            console.log("Returned place contains no geometry");
+          return;
+        }
+        var icon = {
+          url: place.icon,
+          size: new google.maps.Size(71, 71),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(17, 34),
+          scaledSize: new google.maps.Size(25, 25)
+        };
+
+        // Create a marker for each place.
+        markers.push(new google.maps.Marker({
+        map: map,
+        icon: icon,
+        title: place.name,
+        position: place.geometry.location
+      }));
+
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        bounds.union(place.geometry.viewport);
+      } else {
+      bounds.extend(place.geometry.location);
+      console.log("location: " + place.geometry.location);
+      }
+    });
+   map.fitBounds(bounds);
+  });
+}
