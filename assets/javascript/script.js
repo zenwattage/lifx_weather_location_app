@@ -11,6 +11,18 @@ $("#pac-input").on("keydown", function search(e) {
     //grab value from input field
     input = $(this).val();
 
+    //we need to do some string manipulation, since the google maps api doesn't like spaces or commas, we get rid of those and put a + sign in the place of a space
+    input = input.split(",");
+
+
+    input = input.join("+");
+
+
+    input = input.split(" ");
+
+
+    input = input.join("");
+
     console.log("value of input: " + input);
 
     //google map api query using user input
