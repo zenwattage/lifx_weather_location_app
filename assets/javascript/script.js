@@ -14,7 +14,7 @@ $("#pac-input").on("keydown", function search(e) {
     console.log("value of input: " + input);
 
     //google map api query using user input
-    var queryURL = "https://maps.googleapis.com/maps/api/geocode/json?&address=" + input + "&key=" + googleAPIKey;
+    var queryURL = "https://maps.googleapis.com/maps/api/geocode/json?&address=" + input + "&key=" + gmConfig.apiKey;
 
 
     $.ajax({
@@ -31,9 +31,6 @@ $("#pac-input").on("keydown", function search(e) {
         //grab lattitude from google map api object
         lat = response.results[0].geometry.location.lat;
 
-        var cityQueryURL = "https://api.openweathermap.org/data/2.5/weather?q="
-          + city + "&units=" + owmConfig.units + "&appid="
-          + owmConfig.weatherAPIKey;
         //decimal values too long for open weather map api, so we use precision to make the decimal values smaller
         var cndLat = lat.toPrecision(5);
 
@@ -41,12 +38,6 @@ $("#pac-input").on("keydown", function search(e) {
 
         lng = response.results[0].geometry.location.lng;
 
-        owmConfig.cityID = response.id;
-
-        console.log(owmConfig.cityID);
-
-        var idQueryURL = "https://api.openweathermap.org/data/2.5/weather?id="
-          + owmConfig.cityID + "&units=" + owmConfig.units + "&appid=" + owmConfig.weatherAPIKey;
         var cndLng = lng.toPrecision(5);
 
         console.log(cndLng);
@@ -55,7 +46,7 @@ $("#pac-input").on("keydown", function search(e) {
         console.log("longitude: " + cndLng);
 
         //open weather map api url using lattitude and longitude that we received from the google map api call
-        var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + cndLat + "&lon=" + cndLng + "&units=" + units + "&appid=" + weatherAPIKey;
+        var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + cndLat + "&lon=" + cndLng + "&units=" + owmConfig.units + "&appid=" + owmConfig.weatherAPIKey;
 
         $.ajax({
           url: coordQueryURL,
