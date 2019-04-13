@@ -91,6 +91,7 @@ var myDeskLamp = ""; //"d073d53e6090";
 
 var lifxStateUrl = "https://api.lifx.com/v1/lights/" + myDeskLamp + "/state";
 
+//just calling the api to console log some stuff making sure it's working
 $.ajax({
   url: 'https://api.lifx.com/v1/lights/all',
   headers: { "Authorization": bearer + lifxToken },
@@ -104,7 +105,7 @@ $.ajax({
   console.log("hue is: " + res[0].color.hue);
   console.log("power is: " + res[0].power);
 
-  //console.log(res[0].data);
+  console.log(res[0].data);
 })
 
 
