@@ -85,9 +85,9 @@ function citytoID(city) {
 var bearer = "Bearer ";
 
 //CHANGE THIS TO YOUR PERSONAL LIFX TOKEN
-var lifxToken = "";//"cd98e1a574aeb1bb0a18dea42aa3a2ed817ac938425df6acaecd1547d3253e58";
+var lifxToken = "cd98e1a574aeb1bb0a18dea42aa3a2ed817ac938425df6acaecd1547d3253e58";
 //CHANGE THIS TO THE ID OF THE BULB YOU WANT
-var myDeskLamp = ""; //"d073d53e6090";
+var myDeskLamp = "d073d53e6090";
 
 var lifxStateUrl = "https://api.lifx.com/v1/lights/" + myDeskLamp + "/state";
 
