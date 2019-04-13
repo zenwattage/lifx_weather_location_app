@@ -112,6 +112,29 @@ $.ajax({
 // COLOR FUNCTIONS
 
 
+
+//onOff switch
+function onOffSwitch() {
+  $.ajax({
+    type: "PUT",
+    url: "https://api.lifx.com/v1/lights/d073d53e6090/toggle",
+    headers: { "Authorization": bearer + lifxToken },
+    data: {
+      //"power": "off",
+      "fast": false,
+      "defaults":
+      {
+        "duration": 6.0 // all states will be applied over 5 seconds
+
+      }
+    }
+  });
+
+} //end of onOff
+
+$("#onoffbutton").on("click", onOffSwitch);
+
+
 //red for hot weather 
 function redSwitch() {
   $.ajax({
