@@ -17,6 +17,7 @@ var fbConfig = {
 
 var liConfig = {
     token: "cccb9f2b0babf4f865463a8c2fd215fb8e29e547f3c57a03befaed4242cf9ffd",
+    headers: {"Authorization": "Bearer "+ this.token},
 }
 
 var gmConfig = {
