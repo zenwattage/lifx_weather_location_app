@@ -7,12 +7,12 @@ var owmConfig = {
 };
 
 var fbConfig = {
-    apiKey: "AIzaSyDd3BtmB_Yt1nkW8WG25orFzOW_hHm84-Y",
-    authDomain: "project1-e4ebd.firebaseapp.com",
-    databaseURL: "https://project1-e4ebd.firebaseio.com",
-    projectId: "project1-e4ebd",
-    storageBucket: "project1-e4ebd.appspot.com",
-    messagingSenderId: "404140451591"
+    apiKey: "AIzaSyAEHdLLHPhMsl4SUaJGiAt1OZXHcMgsMao",
+    authDomain: "bulb-project-177d8.firebaseapp.com",
+    databaseURL: "https://bulb-project-177d8.firebaseio.com",
+    projectId: "bulb-project-177d8",
+    storageBucket: "bulb-project-177d8.appspot.com",
+    messagingSenderId: "137184575165"
 };
 
 var liConfig = {
