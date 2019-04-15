@@ -3,6 +3,12 @@ firebase.initializeApp(fbConfig);
 
 var googleLat;
 var googleLng;
+//60 seconds in a minute
+var seconds = 60;
+//15 minute timer for our page to refresh
+var minutes = 15;
+//convert 15 minutes to seconds, use this in our setInterval function
+var timeDuration = seconds * minutes;
 
 //our input field...
 $("#pac-input").on("keydown", function search(e) {
@@ -29,6 +35,12 @@ $("#pac-input").on("keydown", function search(e) {
 
     //call our function with the specified user input
     placetoCoord(input);
+
+    //call our placetoCoord function every 15 minutes to get updated weather forecasts
+    setInterval(function(){
+      placetoCoord(input);
+    }, 1000 * timeDuration);
+
   }
 
 });
@@ -73,6 +85,10 @@ function initAutocomplete() {
 
     //call our function with lat and lng
     clicktoCoord(googleLat, googleLng);
+
+    setInterval(function(){
+      clicktoCoord(googleLat, googleLng);
+    }, 1000 * timeDuration);
 
 
     if (places.length == 0) {
@@ -183,6 +199,7 @@ function placetoCoord (place) {
       console.log("lattitude: " + cndLat);
       console.log("longitude: " + cndLng);
 
+      //open weather map api call
       var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + cndLat + "&lon=" + cndLng + "&units=" + owmConfig.units + "&appid=" + owmConfig.weatherAPIKey;
 
       $.ajax({
