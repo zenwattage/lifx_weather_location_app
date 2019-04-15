@@ -16,9 +16,11 @@ var fbConfig = {
 };
 
 var liConfig = {
-    token: "cccb9f2b0babf4f865463a8c2fd215fb8e29e547f3c57a03befaed4242cf9ffd",
+    token: "cd98e1a574aeb1bb0a18dea42aa3a2ed817ac938425df6acaecd1547d3253e58",
+    deviceId: "d073d53e6090"
 }
 
 var gmConfig = {
     apiKey: "AIzaSyCPoxqZMEm0Zf9SHeQMBBhF2dUDsROvUOE",
 }
+
