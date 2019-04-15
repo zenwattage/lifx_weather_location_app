@@ -61,6 +61,8 @@ margin: 50px;
 
 #map {
         height: 100%;
+        width: 80%;
+        margin: auto;
 }
 
     /* Optional: Makes the sample page fill the window. */
