@@ -57,6 +57,20 @@
     <!-- js link -->
     <script src="assets/javascript/configs.js"></script>
     <script src="assets/javascript/script.js"></script>
+    <script>
+        $("#token-input-modal").modal({ show: false })
+        $(function () {
+            $("#set-token").on("click", function (event) {
+                event.preventDefault();
+                var theToken = $("#token-input").val().trim();
+                console.log(theToken);
+                $("#token-input").val("");
+                if (theToken.length) {
+                    SetToken(theToken);
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
