@@ -1,26 +1,26 @@
 <!DOCTYPE html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Color Spectron-o-meter</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Group CSS -->
-    <link rel="stylesheet" href="assets/style.css">
     <!-- Reset CSS -->
-    <link rel="stylesheet" href="assets/reset.css">
+    <link rel="stylesheet" href="assets/css/reset.css">
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Group CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
 
 </head>
 
-<body id='body'>
-    <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-    
+<body>
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <div id="map"></div>
 
+<<<<<<< HEAD
     <div class="container ">
         <div class="input-error text-center">
             <p>Malformed Input</p>
@@ -39,18 +39,61 @@
         <button id="bluebutton">Blue</button>
         <button id="purplebutton">Purple</button>
         <button id="yellowbutton">Yellow</button>
+=======
+    <div class="modal fade" id="token-input-modal" tabindex="-1" role="dialog" aria-labelledby="token-input-modal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="token-input-title">Enter your LiFX token</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="">
+                    <div class="modal-body">
+                        <label for="token-input">Enter your lifx token: </label>
+                        <input type="text" class="form-control" name="token-input" id="token-input">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="submit" id="set-token" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+>>>>>>> b0ef36a2cbac0df62264d0eb95da726afd323afd
         </div>
 
         
     </div>
 
-    <!-- firebase link -->
-    <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase.js"></script>
+
+    <!-- firebase links - gets rid of the console warning -->
+    <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-database.js"></script>
     <!-- jquery link -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- google maps -->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPoxqZMEm0Zf9SHeQMBBhF2dUDsROvUOE&libraries=places&callback=initAutocomplete"
+        async defer></script>
     <!-- js link -->
-    <script src="assets/script.js"></script>
+    <script src="assets/javascript/configs.js"></script>
+    <script src="assets/javascript/script.js"></script>
+    <script>
+        $("#token-input-modal").modal({ show: false })
+        $(function () {
+            $("#set-token").on("click", function (event) {
+                event.preventDefault();
+                var theToken = $("#token-input").val().trim();
+                console.log(theToken);
+                $("#token-input").val("");
+                if (theToken.length) {
+                    SetToken(theToken);
+                }
+            });
+        });
+    </script>
 </body>
-
 
 </html>
