@@ -19,16 +19,58 @@
 <body>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box">
     <div id="map"></div>
-    
-    <!-- firebase link -->
-    <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase.js"></script>
+
+    <div class="modal fade" id="token-input-modal" tabindex="-1" role="dialog" aria-labelledby="token-input-modal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="token-input-title">Enter your LiFX token</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="">
+                    <div class="modal-body">
+                        <label for="token-input">Enter your lifx token: </label>
+                        <input type="text" class="form-control" name="token-input" id="token-input">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="submit" id="set-token" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- firebase links - gets rid of the console warning -->
+    <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-database.js"></script>
     <!-- jquery link -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- google maps -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPoxqZMEm0Zf9SHeQMBBhF2dUDsROvUOE&libraries=places&callback=initAutocomplete"
-    async defer></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPoxqZMEm0Zf9SHeQMBBhF2dUDsROvUOE&libraries=places&callback=initAutocomplete"
+        async defer></script>
     <!-- js link -->
     <script src="assets/javascript/configs.js"></script>
     <script src="assets/javascript/script.js"></script>
-  </body>
+    <script>
+        $("#token-input-modal").modal({ show: false })
+        $(function () {
+            $("#set-token").on("click", function (event) {
+                event.preventDefault();
+                var theToken = $("#token-input").val().trim();
+                console.log(theToken);
+                $("#token-input").val("");
+                if (theToken.length) {
+                    SetToken(theToken);
+                }
+            });
+        });
+    </script>
+</body>
+
 </html>
