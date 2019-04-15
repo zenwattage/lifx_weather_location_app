@@ -122,6 +122,7 @@ function initAutocomplete() {
     //call our function with lat and lng
     clicktoCoord(googleLat, googleLng);
 
+    //call the weather api every 15 minutes
     setInterval(function(){
       clicktoCoord(googleLat, googleLng);
     }, 1000 * timeDuration);
