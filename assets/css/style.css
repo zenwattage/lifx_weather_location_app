@@ -101,4 +101,7 @@ margin: 50px;
 #map #infowindow-content {
     display: inline;
 }
-      
+
+.pac-container {
+    background-color: red !important;
+}
