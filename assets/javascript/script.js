@@ -154,3 +154,190 @@ function initAutocomplete() {
     map.fitBounds(bounds);
   });
 }
+
+
+
+
+// --- LIFX API CALLS ----
+
+var bearer = "Bearer ";
+
+//CHANGE THIS TO YOUR PERSONAL LIFX TOKEN
+var lifxToken = "cd98e1a574aeb1bb0a18dea42aa3a2ed817ac938425df6acaecd1547d3253e58";
+//CHANGE THIS TO THE ID OF THE BULB YOU WANT
+var myDeskLamp = "d073d53e6090";
+
+var lifxStateUrl = "https://api.lifx.com/v1/lights/" + myDeskLamp + "/state";
+
+//just calling the api to console log some stuff making sure it's working
+$.ajax({
+  url: 'https://api.lifx.com/v1/lights/all',
+  headers: { "Authorization": bearer + lifxToken },
+  type: 'GET'
+
+}).then(function (res) {
+  console.log(res);
+  console.log("id is: " + res[0].id);
+  console.log("color is: " + res[0].color);
+  console.log("kevlin is: " + res[0].color.kelvin);
+  console.log("hue is: " + res[0].color.hue);
+  console.log("power is: " + res[0].power);
+
+  console.log(res[0].data);
+})
+
+
+// COLOR FUNCTIONS
+
+
+
+//onOff switch
+function onOffSwitch() {
+  $.ajax({
+    type: "PUT",
+    url: "https://api.lifx.com/v1/lights/d073d53e6090/toggle",
+    headers: { "Authorization": bearer + lifxToken },
+    data: {
+      //"power": "off",
+      "fast": false,
+      "defaults":
+      {
+        "duration": 6.0 // all states will be applied over 5 seconds
+
+      }
+    }
+  });
+
+} //end of onOff
+
+$("#onoffbutton").on("click", onOffSwitch);
+
+
+//red for hot weather 
+function redSwitch() {
+  $.ajax({
+    type: "PUT",
+    url: lifxStateUrl,
+    headers: { "Authorization": bearer + lifxToken },
+    data: {
+      "power": "on",
+      "color": "red",
+      "brightness": 0.1,
+      "kelvin": 2700,
+      "fast": false,
+      "defaults":
+      {
+        "duration": 5.0 // all states will be applied over 5 seconds
+
+      }
+    }
+  });
+} // end of redSwitch
+
+$("#redbutton").on("click", redSwitch);
+
+
+
+//green switch
+function greenSwitch() {
+  $.ajax({
+    type: "PUT",
+    url: lifxStateUrl,
+    headers: { "Authorization": bearer + lifxToken },
+    data: {
+      "power": "on",
+      "color": "green",
+
+      "kelvin": 2700,
+      "brightness": 0.1,
+      "fast": false,
+      "defaults":
+      {
+        "duration": 6.0 // all states will be applied over 5 seconds
+
+      }
+    }
+  });
+
+} //end of green
+
+$("#greenbutton").on("click", greenSwitch);
+
+
+// blue for rain?
+// or blue for clear ?  flickering for rain?
+
+function blueSwitch() {
+  $.ajax({
+    type: "PUT",
+    url: lifxStateUrl,
+    headers: { "Authorization": bearer + lifxToken },
+    data: {
+      "power": "on",
+      "color": "blue",
+      "brightness": 0.1,
+      "kelvin": 5000,
+      "fast": false,
+      "defaults":
+      {
+        "duration": 5.0 // all states will be applied over 5 seconds
+
+      }
+    }
+  });
+} //end of blueSwitch
+
+$("#bluebutton").on("click", blueSwitch);
+
+
+
+//purple switch
+function purpleSwitch() {
+  $.ajax({
+    type: "PUT",
+    url: lifxStateUrl,
+    headers: { "Authorization": bearer + lifxToken },
+    data: {
+      "power": "on",
+      "color": "purple",
+
+      "kelvin": 2700,
+      "brightness": 0.1,
+      "fast": false,
+      "defaults":
+      {
+        "duration": 6.0 // all states will be applied over 5 seconds
+
+      }
+    }
+  });
+
+} //end of purple
+
+$("#purplebutton").on("click", purpleSwitch);
+
+
+//yellow switch
+function yellowSwitch() {
+  $.ajax({
+    type: "PUT",
+    url: lifxStateUrl,
+    headers: { "Authorization": bearer + lifxToken },
+    data: {
+      "power": "on",
+      "color": "yellow",
+
+      "kelvin": 2700,
+      "brightness": 0.1,
+      "fast": false,
+      "defaults":
+      {
+        "duration": 6.0 // all states will be applied over 5 seconds
+
+      }
+    }
+  });
+
+} //end of yellow
+
+$("#yellowbutton").on("click", yellowSwitch);
