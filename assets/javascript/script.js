@@ -1,15 +1,17 @@
-
 // Initialize Firebase
 firebase.initializeApp(fbConfig);
+
+var googleLat;
+var googleLng;
 
 //our input field...
 $("#pac-input").on("keydown", function search(e) {
 
   //listen for key press
-  if (e.keyCode == 13) {
+  if (e.keyCode == 13 || e.button == 0) {
 
     //grab value from input field
-    input = $(this).val();
+    input = $(this).val().trim();
 
     //we need to do some string manipulation, since the google maps api doesn't like spaces or commas, we get rid of those and put a + sign in the place of a space
     input = input.split(",");
@@ -25,63 +27,8 @@ $("#pac-input").on("keydown", function search(e) {
 
     console.log("value of input: " + input);
 
-    //google map api query using user input
-    var queryURL = "https://maps.googleapis.com/maps/api/geocode/json?&address=" + input + "&key=" + gmConfig.apiKey;
-
-
-    $.ajax({
-      url: queryURL,
-      method: "GET"
-    })
-
-      .then(function (response) {
-
-        console.log(queryURL);
-
-        console.log(response);
-
-        //grab lattitude from google map api object
-        lat = response.results[0].geometry.location.lat;
-
-        //decimal values too long for open weather map api, so we use precision to make the decimal values smaller
-        var cndLat = lat.toPrecision(5);
-
-        console.log(cndLat);
-
-        lng = response.results[0].geometry.location.lng;
-
-        var cndLng = lng.toPrecision(5);
-
-        console.log(cndLng);
-
-        console.log("lattitude: " + cndLat);
-        console.log("longitude: " + cndLng);
-
-        //open weather map api url using lattitude and longitude that we received from the google map api call
-        var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + cndLat + "&lon=" + cndLng + "&units=" + owmConfig.units + "&appid=" + owmConfig.weatherAPIKey;
-
-        $.ajax({
-          url: coordQueryURL,
-          method: "GET"
-        })
-
-          .then(function (response) {
-
-            console.log(coordQueryURL);
-
-            console.log(response);
-
-            console.log("today's temperature: " + response.main.temp);
-
-            console.log("today's high: " + response.main.temp_max);
-
-            console.log("today's low: " + response.main.temp_min);
-
-            console.log("today's description: " + response.weather[0].description);
-
-          });
-
-      });
+    //call our function with the specified user input
+    placetoCoord(input);
   }
 
 });
@@ -108,7 +55,25 @@ function initAutocomplete() {
   // Listen for the event fired when the user selects a prediction and retrieve
   // more details for that place.
   searchBox.addListener('places_changed', function () {
+    
     var places = searchBox.getPlaces();
+    
+    googleLng = searchBox.bounds.ga.j;
+
+    //give the lng some precision, as the open weather map api doesn't like floating point numbers too long
+    googleLng = googleLng.toPrecision(5);
+
+    googleLat = searchBox.bounds.ma.j;
+
+    //give the lat some precision, as the open weather map api doesn't like floating point numbers too long
+    googleLat = googleLat.toPrecision(5);
+
+    console.log(googleLng);
+    console.log(googleLat);
+
+    //call our function with lat and lng
+    clicktoCoord(googleLat, googleLng);
+
 
     if (places.length == 0) {
       return;
@@ -153,4 +118,93 @@ function initAutocomplete() {
     });
     map.fitBounds(bounds);
   });
+}
+
+//when user clicks on the predicted choices (box dynamically generated from google), grabs the lattitude and longitude from the place. Then uses the latitude and longitude of the place selected and gather's weather from that place.
+function clicktoCoord (lat, lng) {
+  
+  //google map query
+  var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&units=" + owmConfig.units + "&appid=" + owmConfig.weatherAPIKey;
+
+    $.ajax({
+      url: coordQueryURL,
+      method: "GET"
+    })
+
+        .then(function (response) {
+
+        console.log(coordQueryURL);
+
+        console.log(response);
+
+        console.log("today's temperature: " + response.main.temp);
+
+        console.log("today's high: " + response.main.temp_max);
+
+        console.log("today's low: " + response.main.temp_min);
+
+        console.log("today's description: " + response.weather[0].description);
+
+      });
+}
+
+//when user enters a place in the search bar and then presses enter. This function will that place and use the google map api to query that place. Then extract coordinates from that place and use the latitude and longitude of selected place and make another ajax call to the open weather map api. From this second query, we are able to get weather information
+function placetoCoord (place) {
+
+  //google map api query using user input
+  var queryURL = "https://maps.googleapis.com/maps/api/geocode/json?&address=" + place + "&key=" + gmConfig.apiKey;
+
+
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  })
+
+    .then(function (response) {
+
+      console.log(queryURL);
+
+      console.log(response);
+
+      //grab lattitude from google map api object
+      lat = response.results[0].geometry.location.lat;
+
+      //decimal values too long for open weather map api, so we use precision to make the decimal values smaller
+      var cndLat = lat.toPrecision(5);
+
+      console.log(cndLat);
+
+      lng = response.results[0].geometry.location.lng;
+
+      var cndLng = lng.toPrecision(5);
+
+      console.log(cndLng);
+
+      console.log("lattitude: " + cndLat);
+      console.log("longitude: " + cndLng);
+
+      var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + cndLat + "&lon=" + cndLng + "&units=" + owmConfig.units + "&appid=" + owmConfig.weatherAPIKey;
+
+      $.ajax({
+        url: coordQueryURL,
+        method: "GET"
+      })
+
+        .then(function (response) {
+
+          console.log(coordQueryURL);
+
+          console.log(response);
+
+          console.log("today's temperature: " + response.main.temp);
+
+          console.log("today's high: " + response.main.temp_max);
+
+          console.log("today's low: " + response.main.temp_min);
+
+          console.log("today's description: " + response.weather[0].description);
+
+        });
+
+    });
 }
