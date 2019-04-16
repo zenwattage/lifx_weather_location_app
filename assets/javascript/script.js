@@ -31,6 +31,7 @@ firebase.auth().onAuthStateChanged(function (user) {
       //just calling the api to console log some stuff making sure it's working
     }
     else if (snap.child("lifx/headers").exists()){
+      lifxHeaders = snap.child("lifx/headers").val();
       $.ajax({
         url: 'https://api.lifx.com/v1/lights/all',
         headers: lifxHeaders,
@@ -51,6 +52,9 @@ firebase.auth().onAuthStateChanged(function (user) {
     }
   });
 });
+
+console.log("bulb ID: " + lifxBulb);
+console.log("headers: " + lifxHeaders);
 
 function SetToken(newToken) {
   DB.ref("users/" + uid).set({ lifx: { headers: { "Authorization": "Bearer " + newToken } } });
