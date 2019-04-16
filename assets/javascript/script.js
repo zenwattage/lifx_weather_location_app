@@ -39,7 +39,6 @@ function SetToken(newBulb, newToken) {
   $("#token-input-modal").modal("hide");
 }
 
-<<<<<<< HEAD
 
 // --- LIFX API CALLS ----
 
@@ -234,9 +233,7 @@ $("#yellowbutton").on("click", yellowSwitch);
 
 
 
-=======
 //holds the average latitude
->>>>>>> c519bce4c1d52f1566d604fc196ee9620bf7374b
 var googleLat;
 //holds the average longitude
 var googleLng;
