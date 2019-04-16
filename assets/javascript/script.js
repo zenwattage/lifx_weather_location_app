@@ -21,45 +21,42 @@ firebase.auth().signInWithPopup(provider).then(function (result) {
 // Database access stuff.
 var lifxBulb = "";
 var lifxHeaders = "";
-firebase.auth().onAuthStateChanged(function (user) {
-  DB.ref("users/" + user.uid).on("value", function (snap) {
-    if (snap.child("lifx/bulb").exists() && snap.child("lifx/headers").exists()) {
-      lifxBulb = snap.child("lifx/bulb").val();
-      lifxHeaders = snap.child("lifx/headers").val();
-      console.log(lifxHeaders);
-      //just calling the api to console log some stuff making sure it's working
-      $.ajax({
-        url: 'https://api.lifx.com/v1/lights/all',
-        headers: lifxHeaders,
-        type: 'GET'
+// firebase.auth().onAuthStateChanged(function (user) {
+// });
+    DB.ref("users/" + uid).on("value", function (snap) {
+      if (snap.child("lifx/bulb").exists() && snap.child("lifx/headers").exists()) {
+        lifxBulb = snap.child("lifx/bulb").val();
+        lifxHeaders = snap.child("lifx/headers").val();
+        console.log(lifxHeaders);
+        //just calling the api to console log some stuff making sure it's working
+      }
+      else if (snap.child("lifx/headers").exists()){
+        $.ajax({
+          url: 'https://api.lifx.com/v1/lights/all',
+          headers: lifxHeaders,
+          type: 'GET'
+  
+        }).then(function (res) {
+          console.log(res);
+          for (var i=0; i < res.length; i++){
+            console.log("id is: " + res[i].id);
+            newOpt = $("<option>").val(res[i].id).text(res[i].id);
+            $("#bulb-id").append(newOpt);
+          }
+        });      
+      }
+      else {
+        $("#token-input-modal").modal("show");
+      }
+    });
 
-      }).then(function (res) {
-        console.log(res);
-        console.log("id is: " + res[0].id);
-        console.log("color is: " + res[0].color);
-        console.log("kevlin is: " + res[0].color.kelvin);
-        console.log("hue is: " + res[0].color.hue);
-        console.log("power is: " + res[0].power);
-
-        console.log(res[0].data);
-      })
-
-
-
-
-
-
-
-    }
-    else {
-      $("#token-input-modal").modal("show");
-    }
-  });
-});
-
-function SetToken(newBulb, newToken) {
-  DB.ref("users/" + uid).set({ lifx: { bulb: newBulb, headers: { "Authorization": "Bearer " + newToken } } });
+function SetToken(newToken) {
+  DB.ref("users/" + uid).set({ lifx: { headers: { "Authorization": "Bearer " + newToken } } });
   $("#token-input-modal").modal("hide");
+}
+function SetBulb(newBulb) {
+  DB.ref("users/" + uid).set({ lifx: { headers: { "Authorization": "Bearer " + newBulb } } });
+  $("#bulb-input-modal").modal("hide");
 }
 
 
