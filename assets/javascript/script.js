@@ -239,6 +239,7 @@ function placetoCoord (place) {
       //open weather map api call
       var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + cndLat + "&lon=" + cndLng + "&units=" + owmConfig.units + "&appid=" + owmConfig.weatherAPIKey;
 
+      //ajax call
       $.ajax({
         url: coordQueryURL,
         method: "GET"
