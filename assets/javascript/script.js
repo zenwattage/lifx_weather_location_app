@@ -9,29 +9,52 @@ var provider = new firebase.auth.GoogleAuthProvider();
 // provider.addScope('profile');
 // provider.addScope('email');
 firebase.auth().signInWithPopup(provider).then(function (result) {
-    // This gives you a Google Access Token.
-    var token = result.credential.accessToken;
-    console.log(token);
-    // The signed-in user info.
-    var user = result.user;
-    uid = user.uid;
-    // console.log("user id: " + uid);
+  // This gives you a Google Access Token.
+  var token = result.credential.accessToken;
+  console.log(token);
+  // The signed-in user info.
+  var user = result.user;
+  uid = user.uid;
+  // console.log("user id: " + uid);
 });
 
 // Database access stuff.
 var lifxBulb = "";
 var lifxHeaders = "";
 firebase.auth().onAuthStateChanged(function (user) {
-    DB.ref("users/" + user.uid).on("value", function (snap) {
-        if (snap.child("lifx/bulb").exists() && snap.child("lifx/headers").exists()) {
-            lifxBulb = snap.child("lifx/bulb").val();
-            lifxHeaders = snap.child("lifx/headers").val();
-            console.log(lifxHeaders);
-        }
-        else {
-            $("#token-input-modal").modal("show");
-        }
-    });
+  DB.ref("users/" + user.uid).on("value", function (snap) {
+    if (snap.child("lifx/bulb").exists() && snap.child("lifx/headers").exists()) {
+      lifxBulb = snap.child("lifx/bulb").val();
+      lifxHeaders = snap.child("lifx/headers").val();
+      console.log(lifxHeaders);
+      //just calling the api to console log some stuff making sure it's working
+      $.ajax({
+        url: 'https://api.lifx.com/v1/lights/all',
+        headers: lifxHeaders,
+        type: 'GET'
+
+      }).then(function (res) {
+        console.log(res);
+        console.log("id is: " + res[0].id);
+        console.log("color is: " + res[0].color);
+        console.log("kevlin is: " + res[0].color.kelvin);
+        console.log("hue is: " + res[0].color.hue);
+        console.log("power is: " + res[0].power);
+
+        console.log(res[0].data);
+      })
+
+
+
+
+
+
+
+    }
+    else {
+      $("#token-input-modal").modal("show");
+    }
+  });
 });
 
 function SetToken(newBulb, newToken) {
@@ -45,22 +68,6 @@ function SetToken(newBulb, newToken) {
 
 var lifxStateUrl = "https://api.lifx.com/v1/lights/" + lifxBulb + "/state";
 
-//just calling the api to console log some stuff making sure it's working
-$.ajax({
-  url: 'https://api.lifx.com/v1/lights/all',
-  headers: lifxHeaders,
-  type: 'GET'
-
-}).then(function (res) {
-  console.log(res);
-  console.log("id is: " + res[0].id);
-  console.log("color is: " + res[0].color);
-  console.log("kevlin is: " + res[0].color.kelvin);
-  console.log("hue is: " + res[0].color.hue);
-  console.log("power is: " + res[0].power);
-
-  console.log(res[0].data);
-})
 
 
 // COLOR FUNCTIONS
@@ -265,7 +272,7 @@ $("#pac-input").on("keydown", function search(e) {
     placetoCoord(input);
 
     //call our placetoCoord function every 15 minutes to get updated weather forecasts
-    setInterval(function(){
+    setInterval(function () {
       placetoCoord(input);
     }, 1000 * timeDuration);
 
@@ -295,11 +302,11 @@ function initAutocomplete() {
   // Listen for the event fired when the user selects a prediction and retrieve
   // more details for that place.
   searchBox.addListener('places_changed', function () {
-    
+
     var places = searchBox.getPlaces();
 
     console.log(searchBox);
-    
+
     googleLng = searchBox.bounds.ga.j;
 
     //give the lng some precision, as the open weather map api doesn't like floating point numbers too long
@@ -317,7 +324,7 @@ function initAutocomplete() {
     clicktoCoord(googleLat, googleLng);
 
     //call the weather api every 15 minutes
-    setInterval(function(){
+    setInterval(function () {
       clicktoCoord(googleLat, googleLng);
     }, 1000 * timeDuration);
 
@@ -368,35 +375,35 @@ function initAutocomplete() {
 }
 
 //when user clicks on the predicted choices (box dynamically generated from google), grabs the lattitude and longitude from the place. Then uses the latitude and longitude of the place selected and gather's weather from that place.
-function clicktoCoord (lat, lng) {
-  
+function clicktoCoord(lat, lng) {
+
   //google map query
   var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&units=" + owmConfig.units + "&appid=" + owmConfig.weatherAPIKey;
 
-    $.ajax({
-      url: coordQueryURL,
-      method: "GET"
-    })
+  $.ajax({
+    url: coordQueryURL,
+    method: "GET"
+  })
 
-        .then(function (response) {
+    .then(function (response) {
 
-        console.log(coordQueryURL);
+      console.log(coordQueryURL);
 
-        console.log(response);
+      console.log(response);
 
-        console.log("today's temperature: " + response.main.temp);
+      console.log("today's temperature: " + response.main.temp);
 
-        console.log("today's high: " + response.main.temp_max);
+      console.log("today's high: " + response.main.temp_max);
 
-        console.log("today's low: " + response.main.temp_min);
+      console.log("today's low: " + response.main.temp_min);
 
-        console.log("today's description: " + response.weather[0].description);
+      console.log("today's description: " + response.weather[0].description);
 
-      });
+    });
 }
 
 //when user enters a place in the search bar and then presses enter. This function will that place and use the google map api to query that place. Then extract coordinates from that place and use the latitude and longitude of selected place and make another ajax call to the open weather map api. From this second query, we are able to get weather information
-function placetoCoord (place) {
+function placetoCoord(place) {
 
   //google map api query using user input
   var queryURL = "https://maps.googleapis.com/maps/api/geocode/json?&address=" + place + "&key=" + gmConfig.apiKey;
