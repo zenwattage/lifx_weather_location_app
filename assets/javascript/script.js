@@ -42,19 +42,13 @@ function SetToken(newBulb, newToken) {
 
 // --- LIFX API CALLS ----
 
-var bearer = "Bearer ";
 
-//CHANGE THIS TO YOUR PERSONAL LIFX TOKEN
-var lifxToken = liConfig.token;
-//CHANGE THIS TO THE ID OF THE BULB YOU WANT
-var myDeskLamp = liConfig.deviceId;
-
-var lifxStateUrl = "https://api.lifx.com/v1/lights/" + myDeskLamp + "/state";
+var lifxStateUrl = "https://api.lifx.com/v1/lights/" + lifxBulb + "/state";
 
 //just calling the api to console log some stuff making sure it's working
 $.ajax({
   url: 'https://api.lifx.com/v1/lights/all',
-  lifxHeaders,
+  headers: lifxHeaders,
   type: 'GET'
 
 }).then(function (res) {
@@ -77,8 +71,8 @@ $.ajax({
 function onOffSwitch() {
   $.ajax({
     type: "PUT",
-    url: "https://api.lifx.com/v1/lights/d073d53e6090/toggle",
-    lifxHeaders,
+    url: "https://api.lifx.com/v1/lights/" + lifxBulb + "/toggle",
+    headers: lifxHeaders,
     data: {
       //"power": "off",
       "fast": false,
@@ -100,7 +94,7 @@ function redSwitch() {
   $.ajax({
     type: "PUT",
     url: lifxStateUrl,
-    lifxHeaders,
+    headers: lifxHeaders,
     data: {
       //"power": "on",
       "color": "red",
@@ -125,7 +119,7 @@ function greenSwitch() {
   $.ajax({
     type: "PUT",
     url: lifxStateUrl,
-    lifxHeaders,
+    headers: lifxHeaders,
     data: {
       "power": "on",
       "color": "green",
@@ -153,7 +147,7 @@ function blueSwitch() {
   $.ajax({
     type: "PUT",
     url: lifxStateUrl,
-    lifxHeaders,
+    headers: lifxHeaders,
     data: {
       "power": "on",
       "color": "blue",
@@ -178,7 +172,7 @@ function purpleSwitch() {
   $.ajax({
     type: "PUT",
     url: lifxStateUrl,
-    lifxHeaders,
+    headers: lifxHeaders,
     data: {
       "power": "on",
       "color": "purple",
@@ -204,7 +198,7 @@ function yellowSwitch() {
   $.ajax({
     type: "PUT",
     url: lifxStateUrl,
-    headers: { "Authorization": bearer + lifxToken },
+    headers: lifxHeaders,
     data: {
       "power": "on",
       "color": "yellow",
@@ -463,7 +457,3 @@ function placetoCoord (place) {
 
     });
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> c519bce4c1d52f1566d604fc196ee9620bf7374b
