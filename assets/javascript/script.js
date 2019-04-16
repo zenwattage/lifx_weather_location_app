@@ -27,6 +27,7 @@ var lifxHeaders = "";
       if (snap.child("lifx/bulb").exists() && snap.child("lifx/headers").exists()) {
         lifxBulb = snap.child("lifx/bulb").val();
         lifxHeaders = snap.child("lifx/headers").val();
+        console.log(lifxBulb);
         console.log(lifxHeaders);
         //just calling the api to console log some stuff making sure it's working
       }
@@ -56,7 +57,7 @@ function SetToken(newToken) {
   $("#token-input-modal").modal("hide");
 }
 function SetBulb(newBulb) {
-  DB.ref("users/" + uid).set({ lifx: { headers: { "Authorization": "Bearer " + newBulb } } });
+  DB.ref("users/" + uid).update({ lifx: { bulb: newBulb } });
   $("#bulb-input-modal").modal("hide");
 }
 
