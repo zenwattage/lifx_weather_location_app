@@ -237,6 +237,8 @@ $("#yellowbutton").on("click", yellowSwitch);
 
 
 
+//user clicked input
+var clickInput;
 //holds the average latitude
 var googleLat;
 //holds the average longitude
@@ -258,25 +260,21 @@ $("#pac-input").on("keydown", function search(e) {
     input = $(this).val().trim();
 
     //we need to do some string manipulation, since the google maps api doesn't like spaces or commas, we get rid of those and put a + sign in the place of a space
-    input = input.split(",");
+    var inputFormat = stringFormat(input);
 
-
-    input = input.join("+");
-
-
-    input = input.split(" ");
-
-
-    input = input.join("");
-
-    console.log("value of input: " + input);
+    console.log("value of input: " + inputFormat);
 
     //call our function with the specified user input
-    placetoCoord(input);
+    placetoCoord(inputFormat);
 
     //call our placetoCoord function every 15 minutes to get updated weather forecasts
+<<<<<<< HEAD
+    setInterval(function(){
+      placetoCoord(inputFormat);
+=======
     setInterval(function () {
       placetoCoord(input);
+>>>>>>> origin/master
     }, 1000 * timeDuration);
 
   }
@@ -309,26 +307,28 @@ function initAutocomplete() {
     var places = searchBox.getPlaces();
 
     console.log(searchBox);
+<<<<<<< HEAD
+=======
 
     googleLng = searchBox.bounds.ga.j;
+>>>>>>> origin/master
 
-    //give the lng some precision, as the open weather map api doesn't like floating point numbers too long
-    googleLng = googleLng.toPrecision(5);
+    clickInput = searchBox.gm_accessors_.places.Uc.formattedPrediction;
 
-    googleLat = searchBox.bounds.ma.j;
+    var clickedInput = stringFormat(clickInput);
 
-    //give the lat some precision, as the open weather map api doesn't like floating point numbers too long
-    googleLat = googleLat.toPrecision(5);
+    console.log("click input: " + clickedInput);
 
-    console.log(googleLng);
-    console.log(googleLat);
-
-    //call our function with lat and lng
-    clicktoCoord(googleLat, googleLng);
+    placetoCoord(clickedInput);
 
     //call the weather api every 15 minutes
+<<<<<<< HEAD
+    setInterval(function(){
+      placetoCoord(clickedInput);
+=======
     setInterval(function () {
       clicktoCoord(googleLat, googleLng);
+>>>>>>> origin/master
     }, 1000 * timeDuration);
 
 
@@ -377,6 +377,15 @@ function initAutocomplete() {
   });
 }
 
+<<<<<<< HEAD
+//format input string. Get rid of "," and spaces, put a "+" in place of space i.e seattle, wa, us would turn out to be seattle+wa+us
+function stringFormat (str) {
+  str = str.split(",");
+  str = str.join("+");
+  str = str.split(" ");
+  str = str.join("");
+  return str;
+=======
 //when user clicks on the predicted choices (box dynamically generated from google), grabs the lattitude and longitude from the place. Then uses the latitude and longitude of the place selected and gather's weather from that place.
 function clicktoCoord(lat, lng) {
 
@@ -403,6 +412,7 @@ function clicktoCoord(lat, lng) {
       console.log("today's description: " + response.weather[0].description);
 
     });
+>>>>>>> origin/master
 }
 
 //when user enters a place in the search bar and then presses enter. This function will that place and use the google map api to query that place. Then extract coordinates from that place and use the latitude and longitude of selected place and make another ajax call to the open weather map api. From this second query, we are able to get weather information
