@@ -19,11 +19,13 @@ firebase.auth().signInWithPopup(provider).then(function (result) {
 });
 
 // Database access stuff.
+var lifxBulb = "";
 var lifxHeaders = "";
 firebase.auth().onAuthStateChanged(function (user) {
     DB.ref("users/" + user.uid).on("value", function (snap) {
         if (snap.child("lifx").exists()) {
-            lifxHeaders = snap.child("lifx/headers").val()
+            lifxBulb = snap.child("lifx/bulb").val();
+            lifxHeaders = snap.child("lifx/headers").val();
             console.log(lifxHeaders);
         }
         else {
@@ -32,13 +34,21 @@ firebase.auth().onAuthStateChanged(function (user) {
     });
 });
 
-function SetToken(newToken) {
-  DB.ref("users/" + uid).set({ lifx: { headers: { "Authorization": "Bearer " + newToken } } });
+function SetToken(newBulb, newToken) {
+  DB.ref("users/" + uid).set({ lifx: { bulb: newBulb, headers: { "Authorization": "Bearer " + newToken } } });
   $("#token-input-modal").modal("hide");
 }
 
+//holds the average latitude
 var googleLat;
+//holds the average longitude
 var googleLng;
+//60 seconds in a minute
+var seconds = 60;
+//15 minute timer for our page to refresh
+var minutes = 15;
+//convert 15 minutes to seconds, use this in our setInterval function
+var timeDuration = seconds * minutes;
 
 //our input field...
 $("#pac-input").on("keydown", function search(e) {
@@ -65,6 +75,12 @@ $("#pac-input").on("keydown", function search(e) {
 
     //call our function with the specified user input
     placetoCoord(input);
+
+    //call our placetoCoord function every 15 minutes to get updated weather forecasts
+    setInterval(function(){
+      placetoCoord(input);
+    }, 1000 * timeDuration);
+
   }
 
 });
@@ -93,6 +109,8 @@ function initAutocomplete() {
   searchBox.addListener('places_changed', function () {
     
     var places = searchBox.getPlaces();
+
+    console.log(searchBox);
     
     googleLng = searchBox.bounds.ga.j;
 
@@ -109,6 +127,11 @@ function initAutocomplete() {
 
     //call our function with lat and lng
     clicktoCoord(googleLat, googleLng);
+
+    //call the weather api every 15 minutes
+    setInterval(function(){
+      clicktoCoord(googleLat, googleLng);
+    }, 1000 * timeDuration);
 
 
     if (places.length == 0) {
@@ -219,8 +242,10 @@ function placetoCoord (place) {
       console.log("lattitude: " + cndLat);
       console.log("longitude: " + cndLng);
 
+      //open weather map api call
       var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + cndLat + "&lon=" + cndLng + "&units=" + owmConfig.units + "&appid=" + owmConfig.weatherAPIKey;
 
+      //ajax call
       $.ajax({
         url: coordQueryURL,
         method: "GET"
