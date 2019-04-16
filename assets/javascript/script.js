@@ -85,7 +85,7 @@ function onOffSwitch() {
       "fast": false,
       "defaults":
       {
-        "duration": 6.0 // all states will be applied over 5 seconds
+        "duration": 6.0 // all states will be applied over 6 seconds
 
       }
     }
@@ -136,7 +136,7 @@ function greenSwitch() {
       "fast": false,
       "defaults":
       {
-        "duration": 6.0 // all states will be applied over 5 seconds
+        "duration": 6.0 // all states will be applied over 6 seconds
 
       }
     }
@@ -159,7 +159,7 @@ function blueSwitch() {
       "power": "on",
       "color": "blue",
       "brightness": 0.1,
-      "kelvin": 5000,
+      "kelvin": 2700,
       "fast": false,
       "defaults":
       {
