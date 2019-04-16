@@ -46,35 +46,55 @@
         <button id="purplebutton">Purple</button>
         <button id="yellowbutton">Yellow</button>
         <!-- end of wacked in buttons-->
-
-
-    <div class="modal fade" id="token-input-modal" tabindex="-1" role="dialog" aria-labelledby="token-input-modal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="token-input-title">Enter your LiFX token</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+        <div class="modal fade" id="token-input-modal" tabindex="-1" role="dialog" aria-labelledby="token-input-modal"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="token-input-title">Enter your LiFX token</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="">
+                        <div class="modal-body">
+                            <label for="token-input">Enter your lifx token: </label>
+                            <input type="text" class="form-control" name="token-input" id="token-input">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="submit" id="set-token" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
                 </div>
-                <form action="">
-                    <div class="modal-body">
-                        <label for="bulb-id">Enter your bulb ID: </label>
-                        <input type="text" name="bulb-id" id="bulb-id" class="form-control">
-                        <label for="token-input">Enter your lifx token: </label>
-                        <input type="text" class="form-control" name="token-input" id="token-input">
+            </div>
+        </div>
+        <div class="modal fade" id="bulb-input-modal" tabindex="-1" role="dialog" aria-labelledby="token-input-modal"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bulb-input-title">Choose your LiFX bulb</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" name="submit" id="set-lifx" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
+                    <form action="">
+                        <div class="modal-body">
+                            <label for="bulb-id">Bulb ID: </label>
+                            <select name="bulb-id" id="bulb-id" class="form-control"></select>
+                            <label for="bulb-input">Enter your lifx bulb: </label>
+                            <input type="text" class="form-control" name="bulb-input" id="bulb-input">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="submit" id="set-bulb" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 
-        
-    </div>
 
+        
 
     <!-- firebase links - gets rid of the console warning -->
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-app.js"></script>
@@ -102,14 +122,25 @@
     <script>
         $(function () {
             $("#token-input-modal").modal({ show: false });
-            $("#set-lifx").on("click", function (event) {
+            $("#bulb-input-modal").modal({ show: false });
+            $("#set-token").on("click", function (event) {
                 event.preventDefault();
-                var theBulb = $("#bulb-id").val().trim();
+                // var theBulb = $("#bulb-id").val().trim();
                 var theToken = $("#token-input").val().trim();
                 console.log(theToken);
                 $("#token-input").val("");
-                if (theToken.length && theBulb.length) {
-                    SetToken(theBulb, theToken);
+                if (theToken.length) {
+                    SetToken(theToken);
+                }
+            });
+            $("#set-bulb").on("click", function (event) {
+                event.preventDefault();
+                // var theBulb = $("#bulb-id").val().trim();
+                var theBulb = $("#bulb-input").val().trim();
+                console.log(theBulb);
+                $("#bulb-input").val("");
+                if (theBulb.length) {
+                    SetBulb(theBulb);
                 }
             });
         });
