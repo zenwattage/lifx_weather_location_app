@@ -33,7 +33,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     else if (snap.child("lifx/headers").exists()){
       lifxHeaders = snap.child("lifx/headers").val();
       $.ajax({
-        url: 'https://api.lifx.com/v1/lights/all',
+        url: "https://api.lifx.com/v1/lights/all",
         headers: lifxHeaders,
         type: 'GET'
 
@@ -93,7 +93,6 @@ function onOffSwitch() {
 
 $("#onoffbutton").on("click", onOffSwitch);
 
-
 //red for hot weather 
 function redSwitch() {
   $.ajax({
@@ -128,7 +127,6 @@ function greenSwitch() {
     data: {
       "power": "on",
       "color": "green",
-
       "kelvin": 2700,
       "brightness": 0.1,
       "fast": false,
@@ -207,7 +205,6 @@ function yellowSwitch() {
     data: {
       "power": "on",
       "color": "yellow",
-
       "kelvin": 2700,
       "brightness": 0.1,
       "fast": false,
