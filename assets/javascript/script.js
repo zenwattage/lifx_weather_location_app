@@ -39,7 +39,9 @@ function SetToken(newBulb, newToken) {
   $("#token-input-modal").modal("hide");
 }
 
+//holds the average latitude
 var googleLat;
+//holds the average longitude
 var googleLng;
 //60 seconds in a minute
 var seconds = 60;
@@ -107,6 +109,8 @@ function initAutocomplete() {
   searchBox.addListener('places_changed', function () {
     
     var places = searchBox.getPlaces();
+
+    console.log(searchBox);
     
     googleLng = searchBox.bounds.ga.j;
 
