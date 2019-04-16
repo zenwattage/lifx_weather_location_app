@@ -18,33 +18,81 @@
 
 <body>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <div id="results"></div>
+    <button id="onoffbutton">On/Off</button>        
+    <button id="redbutton">Red</button>
+    <button id="greenbutton">Green</button>
+    <button id="bluebutton">Blue</button>
+    <button id="purplebutton">Purple</button>
+    <button id="yellowbutton">Yellow</button>
     <div id="map"></div>
 
-    <div class="modal fade" id="token-input-modal" tabindex="-1" role="dialog" aria-labelledby="token-input-modal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="token-input-title">Enter your LiFX token</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+    <div class="container ">
+        <div class="input-error text-center">
+            <p>Malformed Input</p>
+        </div>
+        <div id='hold' class="window row justify-content-center">
+            <form action="">
+                <input id='input' type="text" name='city'>
+                <input id='submit' type="submit" class="btn btn-block" value="Go">
+            </form>
+
+        <!--wacking in some quick change buttons-->
+        <div id="results"></div>
+        <button id="onoffbutton">On/Off</button>        
+        <button id="redbutton">Red</button>
+        <button id="greenbutton">Green</button>
+        <button id="bluebutton">Blue</button>
+        <button id="purplebutton">Purple</button>
+        <button id="yellowbutton">Yellow</button>
+        <!-- end of wacked in buttons-->
+        <div class="modal fade" id="token-input-modal" tabindex="-1" role="dialog" aria-labelledby="token-input-modal"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="token-input-title">Enter your LiFX token</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="">
+                        <div class="modal-body">
+                            <label for="token-input">Enter your lifx token: </label>
+                            <input type="text" class="form-control" name="token-input" id="token-input">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="submit" id="set-token" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
                 </div>
-                <form action="">
-                    <div class="modal-body">
-                        <label for="bulb-id">Enter your bulb ID: </label>
-                        <input type="text" name="bulb-id" id="bulb-id" class="form-control">
-                        <label for="token-input">Enter your lifx token: </label>
-                        <input type="text" class="form-control" name="token-input" id="token-input">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" name="submit" id="set-lifx" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
+        <div class="modal fade" id="bulb-input-modal" tabindex="-1" role="dialog" aria-labelledby="token-input-modal"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bulb-input-title">Choose your LiFX bulb</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="">
+                        <div class="modal-body">
+                            <label for="bulb-id">Bulb ID: </label>
+                            <select name="bulb-id" id="bulb-id" class="form-control"></select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="submit" id="set-bulb" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
+
+        
 
     <!-- firebase links - gets rid of the console warning -->
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-app.js"></script>
@@ -53,9 +101,8 @@
     <!-- ajax library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- jquery link -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js"
+        integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
     <!-- bootstrap scripts - needed for modal -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
@@ -73,14 +120,24 @@
     <script>
         $(function () {
             $("#token-input-modal").modal({ show: false });
-            $("#set-lifx").on("click", function (event) {
+            $("#bulb-input-modal").modal({ show: false });
+            $("#set-token").on("click", function (event) {
                 event.preventDefault();
-                var theBulb = $("#bulb-id").val().trim();
+                // var theBulb = $("#bulb-id").val().trim();
                 var theToken = $("#token-input").val().trim();
                 console.log(theToken);
                 $("#token-input").val("");
-                if (theToken.length && theBulb.length) {
-                    SetToken(theBulb, theToken);
+                if (theToken.length) {
+                    SetToken(theToken);
+                }
+            });
+            $("#set-bulb").on("click", function (event) {
+                event.preventDefault();
+                var theBulb = $("#bulb-id").val().trim();
+                console.log(theBulb);
+                $("#bulb-input").val("");
+                if (theBulb.length) {
+                    SetBulb(theBulb);
                 }
             });
         });

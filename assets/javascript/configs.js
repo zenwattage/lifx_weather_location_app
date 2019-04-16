@@ -15,6 +15,8 @@ var fbConfig = {
     messagingSenderId: "137184575165"
 };
 
+
 var gmConfig = {
     apiKey: "AIzaSyCPoxqZMEm0Zf9SHeQMBBhF2dUDsROvUOE",
 }
+

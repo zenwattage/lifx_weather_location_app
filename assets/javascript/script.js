@@ -9,35 +9,233 @@ var provider = new firebase.auth.GoogleAuthProvider();
 // provider.addScope('profile');
 // provider.addScope('email');
 firebase.auth().signInWithPopup(provider).then(function (result) {
-    // This gives you a Google Access Token.
-    var token = result.credential.accessToken;
-    console.log(token);
-    // The signed-in user info.
-    var user = result.user;
-    uid = user.uid;
-    // console.log("user id: " + uid);
+  // This gives you a Google Access Token.
+  var token = result.credential.accessToken;
+  console.log(token);
+  // The signed-in user info.
+  var user = result.user;
+  uid = user.uid;
+  // console.log("user id: " + uid);
 });
 
 // Database access stuff.
 var lifxBulb = "";
 var lifxHeaders = "";
 firebase.auth().onAuthStateChanged(function (user) {
-    DB.ref("users/" + user.uid).on("value", function (snap) {
-        if (snap.child("lifx").exists()) {
-            lifxBulb = snap.child("lifx/bulb").val();
-            lifxHeaders = snap.child("lifx/headers").val();
-            console.log(lifxHeaders);
+  DB.ref("users/" + user.uid).on("value", function (snap) {
+    if (snap.child("lifx/bulb").exists() && snap.child("lifx/headers").exists()) {
+      lifxBulb = snap.child("lifx/bulb").val();
+      lifxHeaders = snap.child("lifx/headers").val();
+      console.log(lifxBulb);
+      console.log(lifxHeaders);
+      //just calling the api to console log some stuff making sure it's working
+    }
+    else if (snap.child("lifx/headers").exists()){
+      lifxHeaders = snap.child("lifx/headers").val();
+      $.ajax({
+        url: 'https://api.lifx.com/v1/lights/all',
+        headers: lifxHeaders,
+        type: 'GET'
+
+      }).then(function (res) {
+        console.log(res);
+        for (var i=0; i < res.length; i++){
+          console.log("id is: " + res[i].id);
+          newOpt = $("<option>").val(res[i].id).text(res[i].id);
+          $("#bulb-id").append(newOpt);
+          $("#bulb-input-modal").modal("show");
         }
-        else {
-            $("#token-input-modal").modal("show");
-        }
-    });
+      });      
+    }
+    else {
+      $("#token-input-modal").modal("show");
+    }
+  });
 });
 
-function SetToken(newBulb, newToken) {
-  DB.ref("users/" + uid).set({ lifx: { bulb: newBulb, headers: { "Authorization": "Bearer " + newToken } } });
+console.log("bulb ID: " + lifxBulb);
+console.log("headers: " + lifxHeaders);
+
+function SetToken(newToken) {
+  DB.ref("users/" + uid).set({ lifx: { headers: { "Authorization": "Bearer " + newToken } } });
   $("#token-input-modal").modal("hide");
 }
+function SetBulb(newBulb) {
+  DB.ref("users/" + uid).update({ lifx: { bulb: newBulb } });
+  $("#bulb-input-modal").modal("hide");
+}
+
+
+// --- LIFX API CALLS ----
+
+
+var lifxStateUrl = "https://api.lifx.com/v1/lights/" + lifxBulb + "/state";
+
+
+
+// COLOR FUNCTIONS
+
+
+
+//onOff switch
+function onOffSwitch() {
+  $.ajax({
+    type: "PUT",
+    url: "https://api.lifx.com/v1/lights/" + lifxBulb + "/toggle",
+    headers: lifxHeaders,
+    data: {
+      //"power": "off",
+      "fast": false,
+      "defaults":
+      {
+        "duration": 6.0 // all states will be applied over 5 seconds
+
+      }
+    }
+  });
+
+} //end of onOff
+
+$("#onoffbutton").on("click", onOffSwitch);
+
+
+//red for hot weather 
+function redSwitch() {
+  $.ajax({
+    type: "PUT",
+    url: lifxStateUrl,
+    headers: lifxHeaders,
+    data: {
+      //"power": "on",
+      "color": "red",
+      "brightness": 0.1,
+      "kelvin": 2700,
+      "fast": false,
+      "defaults":
+      {
+        "duration": 5.0 // all states will be applied over 5 seconds
+
+      }
+    }
+  });
+} // end of redSwitch
+
+$("#redbutton").on("click", redSwitch);
+
+
+
+//green switch
+function greenSwitch() {
+  $.ajax({
+    type: "PUT",
+    url: lifxStateUrl,
+    headers: lifxHeaders,
+    data: {
+      "power": "on",
+      "color": "green",
+
+      "kelvin": 2700,
+      "brightness": 0.1,
+      "fast": false,
+      "defaults":
+      {
+        "duration": 6.0 // all states will be applied over 5 seconds
+
+      }
+    }
+  });
+
+} //end of green
+
+$("#greenbutton").on("click", greenSwitch);
+
+
+// blue for rain?
+// or blue for clear ?  flickering for rain?
+
+function blueSwitch() {
+  $.ajax({
+    type: "PUT",
+    url: lifxStateUrl,
+    headers: lifxHeaders,
+    data: {
+      "power": "on",
+      "color": "blue",
+      "brightness": 0.1,
+      "kelvin": 5000,
+      "fast": false,
+      "defaults":
+      {
+        "duration": 5.0 // all states will be applied over 5 seconds
+
+      }
+    }
+  });
+} //end of blueSwitch
+
+$("#bluebutton").on("click", blueSwitch);
+
+
+
+//purple switch
+function purpleSwitch() {
+  $.ajax({
+    type: "PUT",
+    url: lifxStateUrl,
+    headers: lifxHeaders,
+    data: {
+      "power": "on",
+      "color": "purple",
+
+      "kelvin": 2700,
+      "brightness": 0.1,
+      "fast": false,
+      "defaults":
+      {
+        "duration": 6.0 // all states will be applied over 5 seconds
+
+      }
+    }
+  });
+
+} //end of purple
+
+$("#purplebutton").on("click", purpleSwitch);
+
+
+//yellow switch
+function yellowSwitch() {
+  $.ajax({
+    type: "PUT",
+    url: lifxStateUrl,
+    headers: lifxHeaders,
+    data: {
+      "power": "on",
+      "color": "yellow",
+
+      "kelvin": 2700,
+      "brightness": 0.1,
+      "fast": false,
+      "defaults":
+      {
+        "duration": 6.0 // all states will be applied over 5 seconds
+
+      }
+    }
+  });
+
+} //end of yellow
+
+$("#yellowbutton").on("click", yellowSwitch);
+
+
+
+
+
+
+// ----- end of LIFX ----
+
+
 
 //user clicked input
 var clickInput;
@@ -70,8 +268,13 @@ $("#pac-input").on("keydown", function search(e) {
     placetoCoord(inputFormat);
 
     //call our placetoCoord function every 15 minutes to get updated weather forecasts
+<<<<<<< HEAD
     setInterval(function(){
       placetoCoord(inputFormat);
+=======
+    setInterval(function () {
+      placetoCoord(input);
+>>>>>>> origin/master
     }, 1000 * timeDuration);
 
   }
@@ -100,10 +303,15 @@ function initAutocomplete() {
   // Listen for the event fired when the user selects a prediction and retrieve
   // more details for that place.
   searchBox.addListener('places_changed', function () {
-    
+
     var places = searchBox.getPlaces();
 
     console.log(searchBox);
+<<<<<<< HEAD
+=======
+
+    googleLng = searchBox.bounds.ga.j;
+>>>>>>> origin/master
 
     clickInput = searchBox.gm_accessors_.places.Uc.formattedPrediction;
 
@@ -114,8 +322,13 @@ function initAutocomplete() {
     placetoCoord(clickedInput);
 
     //call the weather api every 15 minutes
+<<<<<<< HEAD
     setInterval(function(){
       placetoCoord(clickedInput);
+=======
+    setInterval(function () {
+      clicktoCoord(googleLat, googleLng);
+>>>>>>> origin/master
     }, 1000 * timeDuration);
 
 
@@ -164,6 +377,7 @@ function initAutocomplete() {
   });
 }
 
+<<<<<<< HEAD
 //format input string. Get rid of "," and spaces, put a "+" in place of space i.e seattle, wa, us would turn out to be seattle+wa+us
 function stringFormat (str) {
   str = str.split(",");
@@ -171,10 +385,38 @@ function stringFormat (str) {
   str = str.split(" ");
   str = str.join("");
   return str;
+=======
+//when user clicks on the predicted choices (box dynamically generated from google), grabs the lattitude and longitude from the place. Then uses the latitude and longitude of the place selected and gather's weather from that place.
+function clicktoCoord(lat, lng) {
+
+  //google map query
+  var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&units=" + owmConfig.units + "&appid=" + owmConfig.weatherAPIKey;
+
+  $.ajax({
+    url: coordQueryURL,
+    method: "GET"
+  })
+
+    .then(function (response) {
+
+      console.log(coordQueryURL);
+
+      console.log(response);
+
+      console.log("today's temperature: " + response.main.temp);
+
+      console.log("today's high: " + response.main.temp_max);
+
+      console.log("today's low: " + response.main.temp_min);
+
+      console.log("today's description: " + response.weather[0].description);
+
+    });
+>>>>>>> origin/master
 }
 
 //when user enters a place in the search bar and then presses enter. This function will that place and use the google map api to query that place. Then extract coordinates from that place and use the latitude and longitude of selected place and make another ajax call to the open weather map api. From this second query, we are able to get weather information
-function placetoCoord (place) {
+function placetoCoord(place) {
 
   //google map api query using user input
   var queryURL = "https://maps.googleapis.com/maps/api/geocode/json?&address=" + place + "&key=" + gmConfig.apiKey;
