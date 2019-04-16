@@ -57,11 +57,11 @@ console.log("bulb ID: " + lifxBulb);
 console.log("headers: " + lifxHeaders);
 
 function SetToken(newToken) {
-  DB.ref("users/" + uid).set({ lifx: { headers: { "Authorization": "Bearer " + newToken } } });
+  DB.ref("users/" + uid + "/lifx").set({ headers: { "Authorization": "Bearer " + newToken } });
   $("#token-input-modal").modal("hide");
 }
 function SetBulb(newBulb) {
-  DB.ref("users/" + uid).update({ lifx: { bulb: newBulb } });
+  DB.ref("users/" + uid + "/lifx").update({ bulb: newBulb });
   $("#bulb-input-modal").modal("hide");
 }
 
