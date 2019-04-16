@@ -21,42 +21,47 @@ firebase.auth().signInWithPopup(provider).then(function (result) {
 // Database access stuff.
 var lifxBulb = "";
 var lifxHeaders = "";
-// firebase.auth().onAuthStateChanged(function (user) {
-// });
-    DB.ref("users/" + uid).on("value", function (snap) {
-      if (snap.child("lifx/bulb").exists() && snap.child("lifx/headers").exists()) {
-        lifxBulb = snap.child("lifx/bulb").val();
-        lifxHeaders = snap.child("lifx/headers").val();
-        console.log(lifxHeaders);
-        //just calling the api to console log some stuff making sure it's working
-      }
-      else if (snap.child("lifx/headers").exists()){
-        $.ajax({
-          url: 'https://api.lifx.com/v1/lights/all',
-          headers: lifxHeaders,
-          type: 'GET'
-  
-        }).then(function (res) {
-          console.log(res);
-          for (var i=0; i < res.length; i++){
-            console.log("id is: " + res[i].id);
-            newOpt = $("<option>").val(res[i].id).text(res[i].id);
-            $("#bulb-id").append(newOpt);
-            $("#bulb-input-modal").modal("show");
-          }
-        });      
-      }
-      else {
-        $("#token-input-modal").modal("show");
-      }
-    });
+firebase.auth().onAuthStateChanged(function (user) {
+  DB.ref("users/" + user.uid).on("value", function (snap) {
+    if (snap.child("lifx/bulb").exists() && snap.child("lifx/headers").exists()) {
+      lifxBulb = snap.child("lifx/bulb").val();
+      lifxHeaders = snap.child("lifx/headers").val();
+      console.log(lifxBulb);
+      console.log(lifxHeaders);
+      //just calling the api to console log some stuff making sure it's working
+    }
+    else if (snap.child("lifx/headers").exists()){
+      lifxHeaders = snap.child("lifx/headers").val();
+      $.ajax({
+        url: 'https://api.lifx.com/v1/lights/all',
+        headers: lifxHeaders,
+        type: 'GET'
+
+      }).then(function (res) {
+        console.log(res);
+        for (var i=0; i < res.length; i++){
+          console.log("id is: " + res[i].id);
+          newOpt = $("<option>").val(res[i].id).text(res[i].id);
+          $("#bulb-id").append(newOpt);
+          $("#bulb-input-modal").modal("show");
+        }
+      });      
+    }
+    else {
+      $("#token-input-modal").modal("show");
+    }
+  });
+});
+
+console.log("bulb ID: " + lifxBulb);
+console.log("headers: " + lifxHeaders);
 
 function SetToken(newToken) {
-  DB.ref("users/" + uid).set({ lifx: { headers: { "Authorization": "Bearer " + newToken } } });
+  DB.ref("users/" + uid + "/lifx").set({ headers: { "Authorization": "Bearer " + newToken } });
   $("#token-input-modal").modal("hide");
 }
 function SetBulb(newBulb) {
-  DB.ref("users/" + uid).set({ lifx: { headers: { "Authorization": "Bearer " + newBulb } } });
+  DB.ref("users/" + uid + "/lifx").update({ bulb: newBulb });
   $("#bulb-input-modal").modal("hide");
 }
 
@@ -227,6 +232,8 @@ $("#yellowbutton").on("click", yellowSwitch);
 
 
 
+//user clicked input
+var clickInput;
 //holds the average latitude
 var googleLat;
 //holds the average longitude
@@ -248,25 +255,16 @@ $("#pac-input").on("keydown", function search(e) {
     input = $(this).val().trim();
 
     //we need to do some string manipulation, since the google maps api doesn't like spaces or commas, we get rid of those and put a + sign in the place of a space
-    input = input.split(",");
+    var inputFormat = stringFormat(input);
 
-
-    input = input.join("+");
-
-
-    input = input.split(" ");
-
-
-    input = input.join("");
-
-    console.log("value of input: " + input);
+    console.log("value of input: " + inputFormat);
 
     //call our function with the specified user input
-    placetoCoord(input);
+    placetoCoord(inputFormat);
 
     //call our placetoCoord function every 15 minutes to get updated weather forecasts
-    setInterval(function () {
-      placetoCoord(input);
+    setInterval(function(){
+      placetoCoord(inputFormat);
     }, 1000 * timeDuration);
 
   }
@@ -300,25 +298,17 @@ function initAutocomplete() {
 
     console.log(searchBox);
 
-    googleLng = searchBox.bounds.ga.j;
+    clickInput = searchBox.gm_accessors_.places.Uc.formattedPrediction;
 
-    //give the lng some precision, as the open weather map api doesn't like floating point numbers too long
-    googleLng = googleLng.toPrecision(5);
+    var clickedInput = stringFormat(clickInput);
 
-    googleLat = searchBox.bounds.ma.j;
+    console.log("click input: " + clickedInput);
 
-    //give the lat some precision, as the open weather map api doesn't like floating point numbers too long
-    googleLat = googleLat.toPrecision(5);
-
-    console.log(googleLng);
-    console.log(googleLat);
-
-    //call our function with lat and lng
-    clicktoCoord(googleLat, googleLng);
+    placetoCoord(clickedInput);
 
     //call the weather api every 15 minutes
-    setInterval(function () {
-      clicktoCoord(googleLat, googleLng);
+    setInterval(function(){
+      placetoCoord(clickedInput);
     }, 1000 * timeDuration);
 
 
@@ -367,32 +357,13 @@ function initAutocomplete() {
   });
 }
 
-//when user clicks on the predicted choices (box dynamically generated from google), grabs the lattitude and longitude from the place. Then uses the latitude and longitude of the place selected and gather's weather from that place.
-function clicktoCoord(lat, lng) {
-
-  //google map query
-  var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&units=" + owmConfig.units + "&appid=" + owmConfig.weatherAPIKey;
-
-  $.ajax({
-    url: coordQueryURL,
-    method: "GET"
-  })
-
-    .then(function (response) {
-
-      console.log(coordQueryURL);
-
-      console.log(response);
-
-      console.log("today's temperature: " + response.main.temp);
-
-      console.log("today's high: " + response.main.temp_max);
-
-      console.log("today's low: " + response.main.temp_min);
-
-      console.log("today's description: " + response.weather[0].description);
-
-    });
+//format input string. Get rid of "," and spaces, put a "+" in place of space i.e seattle, wa, us would turn out to be seattle+wa+us
+function stringFormat (str) {
+  str = str.split(",");
+  str = str.join("+");
+  str = str.split(" ");
+  str = str.join("");
+  return str;
 }
 
 //when user enters a place in the search bar and then presses enter. This function will that place and use the google map api to query that place. Then extract coordinates from that place and use the latitude and longitude of selected place and make another ajax call to the open weather map api. From this second query, we are able to get weather information
