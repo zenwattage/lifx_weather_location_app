@@ -82,8 +82,6 @@
                         <div class="modal-body">
                             <label for="bulb-id">Bulb ID: </label>
                             <select name="bulb-id" id="bulb-id" class="form-control"></select>
-                            <label for="bulb-input">Enter your lifx bulb: </label>
-                            <input type="text" class="form-control" name="bulb-input" id="bulb-input">
                         </div>
                         <div class="modal-footer">
                             <button type="submit" name="submit" id="set-bulb" class="btn btn-primary">Save</button>
@@ -135,8 +133,7 @@
             });
             $("#set-bulb").on("click", function (event) {
                 event.preventDefault();
-                // var theBulb = $("#bulb-id").val().trim();
-                var theBulb = $("#bulb-input").val().trim();
+                var theBulb = $("#bulb-id").val().trim();
                 console.log(theBulb);
                 $("#bulb-input").val("");
                 if (theBulb.length) {
