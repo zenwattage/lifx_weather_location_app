@@ -32,11 +32,13 @@
                 </div>
                 <form action="">
                     <div class="modal-body">
+                        <label for="bulb-id">Enter your bulb ID: </label>
+                        <input type="text" name="bulb-id" id="bulb-id" class="form-control">
                         <label for="token-input">Enter your lifx token: </label>
                         <input type="text" class="form-control" name="token-input" id="token-input">
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" name="submit" id="set-token" class="btn btn-primary">Save</button>
+                        <button type="submit" name="submit" id="set-lifx" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>
@@ -69,13 +71,14 @@
     <script>
         $(function () {
             $("#token-input-modal").modal({ show: false });
-            $("#set-token").on("click", function (event) {
+            $("#set-lifx").on("click", function (event) {
                 event.preventDefault();
+                var theBulb = $("#bulb-id").val().trim();
                 var theToken = $("#token-input").val().trim();
                 console.log(theToken);
                 $("#token-input").val("");
-                if (theToken.length) {
-                    SetToken(theToken);
+                if (theToken.length && theBulb.length) {
+                    SetToken(theBulb, theToken);
                 }
             });
         });
