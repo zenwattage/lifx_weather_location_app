@@ -23,7 +23,7 @@ var lifxBulb = "";
 var lifxHeaders = "";
 firebase.auth().onAuthStateChanged(function (user) {
     DB.ref("users/" + user.uid).on("value", function (snap) {
-        if (snap.child("lifx").exists()) {
+        if (snap.child("lifx/bulb").exists() && snap.child("lifx/headers").exists()) {
             lifxBulb = snap.child("lifx/bulb").val();
             lifxHeaders = snap.child("lifx/headers").val();
             console.log(lifxHeaders);
