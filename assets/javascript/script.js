@@ -66,12 +66,7 @@ function SetBulb(newBulb) {
 
 var lifxStateUrl = "https://api.lifx.com/v1/lights/" + lifxBulb + "/state";
 
-
-
 // COLOR FUNCTIONS
-
-
-
 //onOff switch
 function onOffSwitch() {
   $.ajax({
