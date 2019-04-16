@@ -463,7 +463,3 @@ function placetoCoord (place) {
 
     });
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> c519bce4c1d52f1566d604fc196ee9620bf7374b
