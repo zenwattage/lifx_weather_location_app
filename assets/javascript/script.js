@@ -42,6 +42,7 @@ var lifxHeaders = "";
             console.log("id is: " + res[i].id);
             newOpt = $("<option>").val(res[i].id).text(res[i].id);
             $("#bulb-id").append(newOpt);
+            $("#bulb-input-modal").modal("show");
           }
         });      
       }
