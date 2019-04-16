@@ -19,11 +19,13 @@ firebase.auth().signInWithPopup(provider).then(function (result) {
 });
 
 // Database access stuff.
+var lifxBulb = "";
 var lifxHeaders = "";
 firebase.auth().onAuthStateChanged(function (user) {
     DB.ref("users/" + user.uid).on("value", function (snap) {
         if (snap.child("lifx").exists()) {
-            lifxHeaders = snap.child("lifx/headers").val()
+            lifxBulb = snap.child("lifx/bulb").val();
+            lifxHeaders = snap.child("lifx/headers").val();
             console.log(lifxHeaders);
         }
         else {
@@ -32,12 +34,14 @@ firebase.auth().onAuthStateChanged(function (user) {
     });
 });
 
-function SetToken(newToken) {
-  DB.ref("users/" + uid).set({ lifx: { headers: { "Authorization": "Bearer " + newToken } } });
+function SetToken(newBulb, newToken) {
+  DB.ref("users/" + uid).set({ lifx: { bulb: newBulb, headers: { "Authorization": "Bearer " + newToken } } });
   $("#token-input-modal").modal("hide");
 }
 
+//holds the average latitude
 var googleLat;
+//holds the average longitude
 var googleLng;
 //60 seconds in a minute
 var seconds = 60;
@@ -105,6 +109,8 @@ function initAutocomplete() {
   searchBox.addListener('places_changed', function () {
     
     var places = searchBox.getPlaces();
+
+    console.log(searchBox);
     
     googleLng = searchBox.bounds.ga.j;
 
