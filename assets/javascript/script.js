@@ -82,19 +82,10 @@ function SetBulb(newBulb) {
 //onOff switch
 function onOffSwitch() {
   $.ajax({
-    type: "PUT",
+    type: "POST",
     url: "https://api.lifx.com/v1/lights/" + lifxBulb + "/toggle",
     headers: lifxHeaders,
     contentType: "application/json",
-    data: {
-      //"power": "off",
-      "fast": false,
-      "defaults":
-      {
-        "duration": 6.0 // all states will be applied over 5 seconds
-
-      }
-    }
   });
 
 } //end of onOff
@@ -109,8 +100,8 @@ function redSwitch() {
     url: lifxStateUrl,
     headers: lifxHeaders,
     contentType: "application/json",
-    data: {
-      //"power": "on",
+    data: JSON.stringify({
+      //power": "on",
       "color": "red",
       "brightness": 0.1,
       "kelvin": 2700,
@@ -120,7 +111,7 @@ function redSwitch() {
         "duration": 5.0 // all states will be applied over 5 seconds
 
       }
-    }
+    })
   });
 } // end of redSwitch
 
@@ -135,7 +126,7 @@ function greenSwitch() {
     url: lifxStateUrl,
     headers: lifxHeaders,
     contentType: "application/json",
-    data: {
+    data: JSON.stringify({
       "power": "on",
       "color": "green",
 
@@ -147,7 +138,7 @@ function greenSwitch() {
         "duration": 6.0 // all states will be applied over 5 seconds
 
       }
-    }
+    })
   });
 
 } //end of green
@@ -164,7 +155,7 @@ function blueSwitch() {
     url: lifxStateUrl,
     headers: lifxHeaders,
     contentType: "application/json",
-    data: {
+    data: JSON.stringify({
       "power": "on",
       "color": "blue",
       "brightness": 0.1,
@@ -175,7 +166,7 @@ function blueSwitch() {
         "duration": 5.0 // all states will be applied over 5 seconds
 
       }
-    }
+    })
   });
 } //end of blueSwitch
 
@@ -190,7 +181,7 @@ function purpleSwitch() {
     url: lifxStateUrl,
     headers: lifxHeaders,
     contentType: "application/json",
-    data: {
+    data: JSON.stringify({
       "power": "on",
       "color": "purple",
 
@@ -202,7 +193,7 @@ function purpleSwitch() {
         "duration": 6.0 // all states will be applied over 5 seconds
 
       }
-    }
+    })
   });
 
 } //end of purple
@@ -217,7 +208,7 @@ function yellowSwitch() {
     url: lifxStateUrl,
     headers: lifxHeaders,
     contentType: "application/json",
-    data: {
+    data: JSON.stringify({
       "power": "on",
       "color": "yellow",
 
@@ -229,7 +220,7 @@ function yellowSwitch() {
         "duration": 6.0 // all states will be applied over 5 seconds
 
       }
-    }
+    })
   });
 
 } //end of yellow
