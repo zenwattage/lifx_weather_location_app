@@ -100,6 +100,7 @@ function redSwitch() {
     url: lifxStateUrl,
     headers: lifxHeaders,
     contentType: "application/json",
+    processData: false,
     data: {
       "power": "on",
       "color": "red",
