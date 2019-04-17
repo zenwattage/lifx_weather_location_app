@@ -77,10 +77,11 @@ function SetBulb(newBulb) {
 //onOff switch
 function onOffSwitch() {
   $.ajax({
-    type: "PUT",
+    type: "POST",
     url: "https://api.lifx.com/v1/lights/" + lifxBulb + "/toggle",
     headers: lifxHeaders,
     contentType: "application/json",
+<<<<<<< HEAD
     data: {
       //"power": "off",
       "fast": false,
@@ -90,6 +91,8 @@ function onOffSwitch() {
 
       }
     }
+=======
+>>>>>>> fbf886f69dc8588e336a4ad55626362eecfc339c
   });
 
 } //end of onOff
@@ -103,8 +106,8 @@ function redSwitch() {
     url: lifxStateUrl,
     headers: lifxHeaders,
     contentType: "application/json",
-    data: {
-      //"power": "on",
+    data: JSON.stringify({
+      //power": "on",
       "color": "red",
       "brightness": 0.1,
       "kelvin": 2700,
@@ -114,7 +117,7 @@ function redSwitch() {
         "duration": 5.0 // all states will be applied over 5 seconds
 
       }
-    }
+    })
   });
 } // end of redSwitch
 
@@ -129,7 +132,7 @@ function greenSwitch() {
     url: lifxStateUrl,
     headers: lifxHeaders,
     contentType: "application/json",
-    data: {
+    data: JSON.stringify({
       "power": "on",
       "color": "green",
       "kelvin": 2700,
@@ -140,7 +143,7 @@ function greenSwitch() {
         "duration": 6.0 // all states will be applied over 6 seconds
 
       }
-    }
+    })
   });
 
 } //end of green
@@ -157,7 +160,7 @@ function blueSwitch() {
     url: lifxStateUrl,
     headers: lifxHeaders,
     contentType: "application/json",
-    data: {
+    data: JSON.stringify({
       "power": "on",
       "color": "blue",
       "brightness": 0.1,
@@ -168,7 +171,7 @@ function blueSwitch() {
         "duration": 5.0 // all states will be applied over 5 seconds
 
       }
-    }
+    })
   });
 } //end of blueSwitch
 
@@ -183,7 +186,7 @@ function purpleSwitch() {
     url: lifxStateUrl,
     headers: lifxHeaders,
     contentType: "application/json",
-    data: {
+    data: JSON.stringify({
       "power": "on",
       "color": "purple",
 
@@ -195,7 +198,7 @@ function purpleSwitch() {
         "duration": 6.0 // all states will be applied over 5 seconds
 
       }
-    }
+    })
   });
 
 } //end of purple
@@ -210,7 +213,7 @@ function yellowSwitch() {
     url: lifxStateUrl,
     headers: lifxHeaders,
     contentType: "application/json",
-    data: {
+    data: JSON.stringify({
       "power": "on",
       "color": "yellow",
       "kelvin": 2700,
@@ -221,7 +224,7 @@ function yellowSwitch() {
         "duration": 6.0 // all states will be applied over 5 seconds
 
       }
-    }
+    })
   });
 
 } //end of yellow
@@ -256,6 +259,9 @@ var rainId = [200, 201, 202, 210, 211, 212, 221, 230, 231, 232,
 
 //our input field...
 $("#pac-input").on("keydown", function search(e) {
+
+  // Preventing the submit button from trying to submit the form
+  event.preventDefault();
 
   //listen for key press
   if (e.keyCode == 13 || e.button == 0) {
@@ -375,7 +381,7 @@ function stringFormat (str) {
   return str;
 }
 
-//when user enters a place in the search bar and then presses enter. This function will that place and use the google map api to query that place. Then extract coordinates from that place and use the latitude and longitude of selected place and make another ajax call to the open weather map api. From this second query, we are able to get weather information
+ //This function will use the google map api to query user selected input. Then extract coordinates from user input and use the latitude and longitude of selected place and make another ajax call to the open weather map api. From this second query, we are able to get weather information
 function placetoCoord(place) {
 
   //google map api query using user input
@@ -436,7 +442,7 @@ function placetoCoord(place) {
           if (temp >= 80 && rainId.indexOf(id) < 0) {
             //call red function
             console.log("it's hot out");
-            //redSwitch();
+            redSwitch();
           }
 
           //if temp less than 60 and id is in rainid array...
@@ -444,7 +450,7 @@ function placetoCoord(place) {
             //call blue function
             console.log(rainId.indexOf(id));
             console.log("it's chilly outside and raining");
-            //blueSwitch();
+            blueSwitch();
           }
 
           //if temp is less than 60 and id is not in rainid array...
@@ -452,7 +458,7 @@ function placetoCoord(place) {
             //call purple function
             console.log(rainId.indexOf(id));
             console.log("it's chilly outside");
-            //purpleSwitch();
+            purpleSwitch();
           }
 
           //if temp is greater than 60, or less than 85 and is not a rainid
@@ -460,7 +466,7 @@ function placetoCoord(place) {
             //call green function
             console.log(rainId.indexOf(id));
             console.log("it's nice outside");
-            //greenSwitch();
+            greenSwitch();
           }
 
           //if temp is greater than 60, or less than 85 and is in rainid
@@ -468,7 +474,7 @@ function placetoCoord(place) {
             //call blue function
             console.log(rainId.indexOf(id));
             console.log("it's nice outside and it's raining");
-            //blueSwitch();
+            blueSwitch();
           }
           
 
