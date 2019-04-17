@@ -19,13 +19,16 @@ firebase.auth().signInWithPopup(provider).then(function (result) {
 });
 
 // Database access stuff.
-var lifxBulb = "";
-var lifxHeaders = "";
+var lifxBulb = "Waiting for bulb info";
+var lifxHeaders = "Waiting for header info";
+var lifxStateUrl = "Also waiting for bulb info";
+
 firebase.auth().onAuthStateChanged(function (user) {
   DB.ref("users/" + user.uid).on("value", function (snap) {
     if (snap.child("lifx/bulb").exists() && snap.child("lifx/headers").exists()) {
       lifxBulb = snap.child("lifx/bulb").val();
       lifxHeaders = snap.child("lifx/headers").val();
+      lifxStateUrl = "https://api.lifx.com/v1/lights/" + lifxBulb + "/state";
       console.log(lifxBulb);
       console.log(lifxHeaders);
       //just calling the api to console log some stuff making sure it's working
@@ -69,7 +72,6 @@ function SetBulb(newBulb) {
 // --- LIFX API CALLS ----
 
 
-var lifxStateUrl = "https://api.lifx.com/v1/lights/" + lifxBulb + "/state";
 
 // COLOR FUNCTIONS
 //onOff switch
@@ -78,6 +80,7 @@ function onOffSwitch() {
     type: "PUT",
     url: "https://api.lifx.com/v1/lights/" + lifxBulb + "/toggle",
     headers: lifxHeaders,
+    contentType: "application/json",
     data: {
       //"power": "off",
       "fast": false,
@@ -99,6 +102,7 @@ function redSwitch() {
     type: "PUT",
     url: lifxStateUrl,
     headers: lifxHeaders,
+    contentType: "application/json",
     data: {
       //"power": "on",
       "color": "red",
@@ -124,6 +128,7 @@ function greenSwitch() {
     type: "PUT",
     url: lifxStateUrl,
     headers: lifxHeaders,
+    contentType: "application/json",
     data: {
       "power": "on",
       "color": "green",
@@ -151,6 +156,7 @@ function blueSwitch() {
     type: "PUT",
     url: lifxStateUrl,
     headers: lifxHeaders,
+    contentType: "application/json",
     data: {
       "power": "on",
       "color": "blue",
@@ -176,6 +182,7 @@ function purpleSwitch() {
     type: "PUT",
     url: lifxStateUrl,
     headers: lifxHeaders,
+    contentType: "application/json",
     data: {
       "power": "on",
       "color": "purple",
@@ -202,6 +209,7 @@ function yellowSwitch() {
     type: "PUT",
     url: lifxStateUrl,
     headers: lifxHeaders,
+    contentType: "application/json",
     data: {
       "power": "on",
       "color": "yellow",

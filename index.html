@@ -116,7 +116,6 @@
             $("#bulb-input-modal").modal({ show: false });
             $("#set-token").on("click", function (event) {
                 event.preventDefault();
-                // var theBulb = $("#bulb-id").val().trim();
                 var theToken = $("#token-input").val().trim();
                 console.log(theToken);
                 $("#token-input").val("");
@@ -127,8 +126,6 @@
             $("#set-bulb").on("click", function (event) {
                 event.preventDefault();
                 var theBulb = $("#bulb-id").val().trim();
-                console.log(theBulb);
-                $("#bulb-input").val("");
                 if (theBulb.length) {
                     SetBulb(theBulb);
                 }
