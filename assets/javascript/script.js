@@ -82,19 +82,19 @@ function SetBulb(newBulb) {
 //onOff switch
 function onOffSwitch() {
   $.ajax({
-    type: "PUT",
+    type: "POST",
     url: "https://api.lifx.com/v1/lights/" + lifxBulb + "/toggle",
     headers: lifxHeaders,
     contentType: "application/json",
-    data: {
-      //"power": "off",
-      "fast": false,
-      "defaults":
-      {
-        "duration": 6.0 // all states will be applied over 5 seconds
+    // data: {
+    //   //"power": "off",
+    //   "fast": false,
+    //   "defaults":
+    //   {
+    //     "duration": 6.0 // all states will be applied over 5 seconds
 
-      }
-    }
+    //   }
+    // }
   });
 
 } //end of onOff
