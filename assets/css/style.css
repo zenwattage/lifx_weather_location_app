@@ -85,7 +85,7 @@ margin: 50px;
     margin-top: 10px;
     outline: none;
     padding: 0 11px 0 13px;
-    text-overflow: ellipsis;
+    /* text-overflow: ellipsis; */
     width: 400px;
 }
 
