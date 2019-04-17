@@ -268,13 +268,8 @@ $("#pac-input").on("keydown", function search(e) {
     placetoCoord(inputFormat);
 
     //call our placetoCoord function every 15 minutes to get updated weather forecasts
-<<<<<<< HEAD
     setInterval(function(){
       placetoCoord(inputFormat);
-=======
-    setInterval(function () {
-      placetoCoord(input);
->>>>>>> origin/master
     }, 1000 * timeDuration);
 
   }
@@ -307,11 +302,6 @@ function initAutocomplete() {
     var places = searchBox.getPlaces();
 
     console.log(searchBox);
-<<<<<<< HEAD
-=======
-
-    googleLng = searchBox.bounds.ga.j;
->>>>>>> origin/master
 
     clickInput = searchBox.gm_accessors_.places.Uc.formattedPrediction;
 
@@ -322,13 +312,8 @@ function initAutocomplete() {
     placetoCoord(clickedInput);
 
     //call the weather api every 15 minutes
-<<<<<<< HEAD
     setInterval(function(){
       placetoCoord(clickedInput);
-=======
-    setInterval(function () {
-      clicktoCoord(googleLat, googleLng);
->>>>>>> origin/master
     }, 1000 * timeDuration);
 
 
@@ -377,7 +362,6 @@ function initAutocomplete() {
   });
 }
 
-<<<<<<< HEAD
 //format input string. Get rid of "," and spaces, put a "+" in place of space i.e seattle, wa, us would turn out to be seattle+wa+us
 function stringFormat (str) {
   str = str.split(",");
@@ -385,34 +369,6 @@ function stringFormat (str) {
   str = str.split(" ");
   str = str.join("");
   return str;
-=======
-//when user clicks on the predicted choices (box dynamically generated from google), grabs the lattitude and longitude from the place. Then uses the latitude and longitude of the place selected and gather's weather from that place.
-function clicktoCoord(lat, lng) {
-
-  //google map query
-  var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&units=" + owmConfig.units + "&appid=" + owmConfig.weatherAPIKey;
-
-  $.ajax({
-    url: coordQueryURL,
-    method: "GET"
-  })
-
-    .then(function (response) {
-
-      console.log(coordQueryURL);
-
-      console.log(response);
-
-      console.log("today's temperature: " + response.main.temp);
-
-      console.log("today's high: " + response.main.temp_max);
-
-      console.log("today's low: " + response.main.temp_min);
-
-      console.log("today's description: " + response.weather[0].description);
-
-    });
->>>>>>> origin/master
 }
 
 //when user enters a place in the search bar and then presses enter. This function will that place and use the google map api to query that place. Then extract coordinates from that place and use the latitude and longitude of selected place and make another ajax call to the open weather map api. From this second query, we are able to get weather information
