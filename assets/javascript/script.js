@@ -257,7 +257,7 @@ var rainId = [200, 201, 202, 210, 211, 212, 221, 230, 231, 232,
 $("#pac-input").on("keydown", function search(e) {
 
   // Preventing the submit button from trying to submit the form
-  event.preventDefault();
+  e.preventDefault();
 
   //listen for key press
   if (e.keyCode == 13 || e.button == 0) {
