@@ -1,4 +1,7 @@
 // Initialize Firebase
+
+$(document).on('ready', function() { 
+
 firebase.initializeApp(fbConfig);
 var DB = firebase.database();
 
@@ -67,9 +70,38 @@ function SetBulb(newBulb) {
   DB.ref("users/" + uid + "/lifx").update({ bulb: newBulb });
   $("#bulb-input-modal").modal("hide");
 }
+/* 
+// --- TWITCH CALL ---- 
 
+var player = new Twitch.Player("twitch", options);
+    var options = {
+      channel: "BeardComber", // TODO: Change this to the streams username you want to embed
+      width: 640,
+      height: 360,
+    };
+    player.addEventListener(Twitch.Player.READY, initiate)
+    function initiate() {
+      player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+      player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+      player.removeEventListener(Twitch.Player.READY, initiate);
+    }
+    function handleOnline() {
+      document.getElementById("twitch").classList.remove('hide');
+      player.removeEventListener(Twitch.Player.ONLINE, handleOnline);
+      player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+      player.setMuted(false);
+    }
+    function handleOffline() {
+      document.getElementById("twitch").classList.add('hide');
+      player.removeEventListener(Twitch.Player.OFFLINE, handleOffline);
+      player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+      player.setMuted(true);
+    }
+ */
 
-// --- LIFX API CALLS ----
+/
+
+// --- LIFX API CALLS ---
 
 
 
@@ -81,18 +113,6 @@ function onOffSwitch() {
     url: "https://api.lifx.com/v1/lights/" + lifxBulb + "/toggle",
     headers: lifxHeaders,
     contentType: "application/json",
-<<<<<<< HEAD
-    data: {
-      //"power": "off",
-      "fast": false,
-      "defaults":
-      {
-        "duration": 6.0 // all states will be applied over 6 seconds
-
-      }
-    }
-=======
->>>>>>> fbf886f69dc8588e336a4ad55626362eecfc339c
   });
 
 } //end of onOff
@@ -485,3 +505,6 @@ function placetoCoord(place) {
 
     });
 }
+
+
+})
