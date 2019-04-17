@@ -17,7 +17,20 @@
 </head>
 
 <body>
+    
+
+    <!-- TWITCH API -->
+
+
+    <h1>Twitch.tv Widget</h1>
+    <iframe src="https://player.twitch.tv/?channel=beardcomber" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
+    <a href="https://www.twitch.tv/beardcomber?tt_content=text_link&tt_medium=live_embed" style="margin-left: 50px; padding:50px 0px 4px; display:block; width:345px; font-weight:normal; font-size:10px; text-decoration:underline;">Watch live video from BeardComber on www.twitch.tv</a>
+
+   <!-- END OF TWITCH API -->
+
     <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    
+    <!--wacking in some quick change buttons-->
     <div id="results"></div>
     <button id="onoffbutton">On/Off</button>        
     <button id="redbutton">Red</button>
@@ -25,7 +38,10 @@
     <button id="bluebutton">Blue</button>
     <button id="purplebutton">Purple</button>
     <button id="yellowbutton">Yellow</button>
+    <!-- end of wacked in buttons-->
+    
     <div id="map"></div>
+
 
     <div class="container ">
         <div class="input-error text-center">
@@ -37,15 +53,6 @@
                 <input id='submit' type="submit" class="btn btn-block" value="Go">
             </form>
 
-        <!--wacking in some quick change buttons-->
-        <div id="results"></div>
-        <button id="onoffbutton">On/Off</button>        
-        <button id="redbutton">Red</button>
-        <button id="greenbutton">Green</button>
-        <button id="bluebutton">Blue</button>
-        <button id="purplebutton">Purple</button>
-        <button id="yellowbutton">Yellow</button>
-        <!-- end of wacked in buttons-->
         <div class="modal fade" id="token-input-modal" tabindex="-1" role="dialog" aria-labelledby="token-input-modal"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -92,8 +99,6 @@
         </div>
 
 
-        
-
     <!-- firebase links - gets rid of the console warning -->
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase-auth.js"></script>
@@ -123,7 +128,6 @@
             $("#bulb-input-modal").modal({ show: false });
             $("#set-token").on("click", function (event) {
                 event.preventDefault();
-                // var theBulb = $("#bulb-id").val().trim();
                 var theToken = $("#token-input").val().trim();
                 console.log(theToken);
                 $("#token-input").val("");
@@ -134,8 +138,6 @@
             $("#set-bulb").on("click", function (event) {
                 event.preventDefault();
                 var theBulb = $("#bulb-id").val().trim();
-                console.log(theBulb);
-                $("#bulb-input").val("");
                 if (theBulb.length) {
                     SetBulb(theBulb);
                 }

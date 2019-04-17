@@ -1,4 +1,7 @@
 // Initialize Firebase
+
+$(document).on('ready', function() { 
+
 firebase.initializeApp(fbConfig);
 var DB = firebase.database();
 
@@ -19,13 +22,16 @@ firebase.auth().signInWithPopup(provider).then(function (result) {
 });
 
 // Database access stuff.
-var lifxBulb = "";
-var lifxHeaders = "";
+var lifxBulb = "Waiting for bulb info";
+var lifxHeaders = "Waiting for header info";
+var lifxStateUrl = "Also waiting for bulb info";
+
 firebase.auth().onAuthStateChanged(function (user) {
   DB.ref("users/" + user.uid).on("value", function (snap) {
     if (snap.child("lifx/bulb").exists() && snap.child("lifx/headers").exists()) {
       lifxBulb = snap.child("lifx/bulb").val();
       lifxHeaders = snap.child("lifx/headers").val();
+      lifxStateUrl = "https://api.lifx.com/v1/lights/" + lifxBulb + "/state";
       console.log(lifxBulb);
       console.log(lifxHeaders);
       //just calling the api to console log some stuff making sure it's working
@@ -33,7 +39,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     else if (snap.child("lifx/headers").exists()){
       lifxHeaders = snap.child("lifx/headers").val();
       $.ajax({
-        url: 'https://api.lifx.com/v1/lights/all',
+        url: "https://api.lifx.com/v1/lights/all",
         headers: lifxHeaders,
         type: 'GET'
 
@@ -64,35 +70,54 @@ function SetBulb(newBulb) {
   DB.ref("users/" + uid + "/lifx").update({ bulb: newBulb });
   $("#bulb-input-modal").modal("hide");
 }
+/* 
+// --- TWITCH CALL ---- 
+
+var player = new Twitch.Player("twitch", options);
+    var options = {
+      channel: "BeardComber", // TODO: Change this to the streams username you want to embed
+      width: 640,
+      height: 360,
+    };
+    player.addEventListener(Twitch.Player.READY, initiate)
+    function initiate() {
+      player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+      player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+      player.removeEventListener(Twitch.Player.READY, initiate);
+    }
+    function handleOnline() {
+      document.getElementById("twitch").classList.remove('hide');
+      player.removeEventListener(Twitch.Player.ONLINE, handleOnline);
+      player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+      player.setMuted(false);
+    }
+    function handleOffline() {
+      document.getElementById("twitch").classList.add('hide');
+      player.removeEventListener(Twitch.Player.OFFLINE, handleOffline);
+      player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+      player.setMuted(true);
+    }
+ */
+
+/
+
+// --- LIFX API CALLS ---
 
 
-// --- LIFX API CALLS ----
-
-
-var lifxStateUrl = "https://api.lifx.com/v1/lights/" + lifxBulb + "/state";
 
 // COLOR FUNCTIONS
 //onOff switch
 function onOffSwitch() {
   $.ajax({
-    type: "PUT",
+    type: "POST",
     url: "https://api.lifx.com/v1/lights/" + lifxBulb + "/toggle",
     headers: lifxHeaders,
-    data: {
-      //"power": "off",
-      "fast": false,
-      "defaults":
-      {
-        "duration": 6.0 // all states will be applied over 6 seconds
-
-      }
-    }
+    contentType: "application/json",
   });
 
 } //end of onOff
 
 $("#onoffbutton").on("click", onOffSwitch);
-
 
 //red for hot weather 
 function redSwitch() {
@@ -100,8 +125,9 @@ function redSwitch() {
     type: "PUT",
     url: lifxStateUrl,
     headers: lifxHeaders,
-    data: {
-      //"power": "on",
+    contentType: "application/json",
+    data: JSON.stringify({
+      //power": "on",
       "color": "red",
       "brightness": 0.1,
       "kelvin": 2700,
@@ -111,7 +137,7 @@ function redSwitch() {
         "duration": 5.0 // all states will be applied over 5 seconds
 
       }
-    }
+    })
   });
 } // end of redSwitch
 
@@ -125,10 +151,10 @@ function greenSwitch() {
     type: "PUT",
     url: lifxStateUrl,
     headers: lifxHeaders,
-    data: {
+    contentType: "application/json",
+    data: JSON.stringify({
       "power": "on",
       "color": "green",
-
       "kelvin": 2700,
       "brightness": 0.1,
       "fast": false,
@@ -137,7 +163,7 @@ function greenSwitch() {
         "duration": 6.0 // all states will be applied over 6 seconds
 
       }
-    }
+    })
   });
 
 } //end of green
@@ -153,7 +179,8 @@ function blueSwitch() {
     type: "PUT",
     url: lifxStateUrl,
     headers: lifxHeaders,
-    data: {
+    contentType: "application/json",
+    data: JSON.stringify({
       "power": "on",
       "color": "blue",
       "brightness": 0.1,
@@ -164,7 +191,7 @@ function blueSwitch() {
         "duration": 5.0 // all states will be applied over 5 seconds
 
       }
-    }
+    })
   });
 } //end of blueSwitch
 
@@ -178,7 +205,8 @@ function purpleSwitch() {
     type: "PUT",
     url: lifxStateUrl,
     headers: lifxHeaders,
-    data: {
+    contentType: "application/json",
+    data: JSON.stringify({
       "power": "on",
       "color": "purple",
 
@@ -190,7 +218,7 @@ function purpleSwitch() {
         "duration": 6.0 // all states will be applied over 5 seconds
 
       }
-    }
+    })
   });
 
 } //end of purple
@@ -204,10 +232,10 @@ function yellowSwitch() {
     type: "PUT",
     url: lifxStateUrl,
     headers: lifxHeaders,
-    data: {
+    contentType: "application/json",
+    data: JSON.stringify({
       "power": "on",
       "color": "yellow",
-
       "kelvin": 2700,
       "brightness": 0.1,
       "fast": false,
@@ -216,7 +244,7 @@ function yellowSwitch() {
         "duration": 6.0 // all states will be applied over 5 seconds
 
       }
-    }
+    })
   });
 
 } //end of yellow
@@ -244,9 +272,16 @@ var seconds = 60;
 var minutes = 15;
 //convert 15 minutes to seconds, use this in our setInterval function
 var timeDuration = seconds * minutes;
+//rain id's
+var rainId = [200, 201, 202, 210, 211, 212, 221, 230, 231, 232,
+  300, 301, 302, 310, 311, 312, 313, 314, 321, 500, 501, 502, 503,
+  504, 511, 520, 521, 522, 531];
 
 //our input field...
 $("#pac-input").on("keydown", function search(e) {
+
+  // Preventing the submit button from trying to submit the form
+  event.preventDefault();
 
   //listen for key press
   if (e.keyCode == 13 || e.button == 0) {
@@ -263,13 +298,8 @@ $("#pac-input").on("keydown", function search(e) {
     placetoCoord(inputFormat);
 
     //call our placetoCoord function every 15 minutes to get updated weather forecasts
-<<<<<<< HEAD
     setInterval(function(){
       placetoCoord(inputFormat);
-=======
-    setInterval(function () {
-      placetoCoord(input);
->>>>>>> origin/master
     }, 1000 * timeDuration);
 
   }
@@ -302,13 +332,8 @@ function initAutocomplete() {
     var places = searchBox.getPlaces();
 
     console.log(searchBox);
-<<<<<<< HEAD
-=======
 
-    googleLng = searchBox.bounds.ga.j;
->>>>>>> origin/master
-
-    clickInput = searchBox.gm_accessors_.places.Uc.formattedPrediction;
+    clickInput = searchBox.gm_accessors_.places.Wc.formattedPrediction;
 
     var clickedInput = stringFormat(clickInput);
 
@@ -317,13 +342,8 @@ function initAutocomplete() {
     placetoCoord(clickedInput);
 
     //call the weather api every 15 minutes
-<<<<<<< HEAD
     setInterval(function(){
       placetoCoord(clickedInput);
-=======
-    setInterval(function () {
-      clicktoCoord(googleLat, googleLng);
->>>>>>> origin/master
     }, 1000 * timeDuration);
 
 
@@ -372,7 +392,6 @@ function initAutocomplete() {
   });
 }
 
-<<<<<<< HEAD
 //format input string. Get rid of "," and spaces, put a "+" in place of space i.e seattle, wa, us would turn out to be seattle+wa+us
 function stringFormat (str) {
   str = str.split(",");
@@ -380,37 +399,9 @@ function stringFormat (str) {
   str = str.split(" ");
   str = str.join("");
   return str;
-=======
-//when user clicks on the predicted choices (box dynamically generated from google), grabs the lattitude and longitude from the place. Then uses the latitude and longitude of the place selected and gather's weather from that place.
-function clicktoCoord(lat, lng) {
-
-  //google map query
-  var coordQueryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&units=" + owmConfig.units + "&appid=" + owmConfig.weatherAPIKey;
-
-  $.ajax({
-    url: coordQueryURL,
-    method: "GET"
-  })
-
-    .then(function (response) {
-
-      console.log(coordQueryURL);
-
-      console.log(response);
-
-      console.log("today's temperature: " + response.main.temp);
-
-      console.log("today's high: " + response.main.temp_max);
-
-      console.log("today's low: " + response.main.temp_min);
-
-      console.log("today's description: " + response.weather[0].description);
-
-    });
->>>>>>> origin/master
 }
 
-//when user enters a place in the search bar and then presses enter. This function will that place and use the google map api to query that place. Then extract coordinates from that place and use the latitude and longitude of selected place and make another ajax call to the open weather map api. From this second query, we are able to get weather information
+ //This function will use the google map api to query user selected input. Then extract coordinates from user input and use the latitude and longitude of selected place and make another ajax call to the open weather map api. From this second query, we are able to get weather information
 function placetoCoord(place) {
 
   //google map api query using user input
@@ -460,15 +451,60 @@ function placetoCoord(place) {
 
           console.log(response);
 
-          console.log("today's temperature: " + response.main.temp);
+          var temp = response.main.temp;
 
-          console.log("today's high: " + response.main.temp_max);
+          var id = response.weather[0].id;
 
-          console.log("today's low: " + response.main.temp_min);
+          console.log("today's temperature: " + temp);
 
-          console.log("today's description: " + response.weather[0].description);
+          console.log("today's description: " + id);
+
+          if (temp >= 80 && rainId.indexOf(id) < 0) {
+            //call red function
+            console.log("it's hot out");
+            redSwitch();
+          }
+
+          //if temp less than 60 and id is in rainid array...
+          else if (temp < 60 && rainId.indexOf(id) > -1) {
+            //call blue function
+            console.log(rainId.indexOf(id));
+            console.log("it's chilly outside and raining");
+            blueSwitch();
+          }
+
+          //if temp is less than 60 and id is not in rainid array...
+          else if (temp < 60 && rainId.indexOf(id) < 0) {
+            //call purple function
+            console.log(rainId.indexOf(id));
+            console.log("it's chilly outside");
+            purpleSwitch();
+          }
+
+          //if temp is greater than 60, or less than 85 and is not a rainid
+          else if((temp >= 60 && rainId.indexOf(id) < 0) || (temp < 80 && rainId.indexOf(id) < 0)) {
+            //call green function
+            console.log(rainId.indexOf(id));
+            console.log("it's nice outside");
+            greenSwitch();
+          }
+
+          //if temp is greater than 60, or less than 85 and is in rainid
+          else if((temp >= 60 && rainId.indexOf(id) > -1) || (temp < 80 && rainId.indexOf(id) > -1)) {
+            //call blue function
+            console.log(rainId.indexOf(id));
+            console.log("it's nice outside and it's raining");
+            blueSwitch();
+          }
+          
+
+
+
 
         });
 
     });
 }
+
+
+})
