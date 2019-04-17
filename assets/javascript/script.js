@@ -56,9 +56,6 @@ firebase.auth().onAuthStateChanged(function (user) {
   });
 });
 
-console.log("bulb ID: " + lifxBulb);
-console.log("headers: " + lifxHeaders);
-
 function SetToken(newToken) {
   DB.ref("users/" + uid + "/lifx").set({ headers: { "Authorization": "Bearer " + newToken } });
   $("#token-input-modal").modal("hide");
