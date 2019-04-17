@@ -81,18 +81,6 @@ function onOffSwitch() {
     url: "https://api.lifx.com/v1/lights/" + lifxBulb + "/toggle",
     headers: lifxHeaders,
     contentType: "application/json",
-<<<<<<< HEAD
-    data: {
-      //"power": "off",
-      "fast": false,
-      "defaults":
-      {
-        "duration": 6.0 // all states will be applied over 6 seconds
-
-      }
-    }
-=======
->>>>>>> fbf886f69dc8588e336a4ad55626362eecfc339c
   });
 
 } //end of onOff
