@@ -113,7 +113,7 @@ function redSwitch() {
       //"power": "on",
       "color": "red",
       "brightness": 0.1,
-      "kelvin": 2700,
+      // "kelvin": 2700,
       "fast": false,
       "defaults":
       {
