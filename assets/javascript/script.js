@@ -33,7 +33,7 @@ firebase.auth().onAuthStateChanged(function (user) {
       console.log(lifxHeaders);
       //just calling the api to console log some stuff making sure it's working
     }
-    else if (snap.child("lifx/headers").exists()){
+    else if (snap.child("lifx/headers").exists()) {
       lifxHeaders = snap.child("lifx/headers").val();
       $.ajax({
         url: 'https://api.lifx.com/v1/lights/all',
@@ -42,13 +42,13 @@ firebase.auth().onAuthStateChanged(function (user) {
 
       }).then(function (res) {
         console.log(res);
-        for (var i=0; i < res.length; i++){
+        for (var i = 0; i < res.length; i++) {
           console.log("id is: " + res[i].id);
           newOpt = $("<option>").val(res[i].id).text(res[i].id);
           $("#bulb-id").append(newOpt);
           $("#bulb-input-modal").modal("show");
         }
-      });      
+      });
     }
     else {
       $("#token-input-modal").modal("show");
@@ -98,16 +98,16 @@ function redSwitch() {
     headers: lifxHeaders,
     contentType: "application/json",
     data: JSON.stringify({
-      //power": "on",
+      "power": "on",
       "color": "red",
       "brightness": 0.1,
-      "kelvin": 2700,
+      // "kelvin": 2700,
       "fast": false,
-      "defaults":
-      {
-        "duration": 5.0 // all states will be applied over 5 seconds
+      // "defaults":
+      // {
+      //   "duration": 5.0 // all states will be applied over 5 seconds
 
-      }
+      // }
     })
   });
 } // end of redSwitch
@@ -271,7 +271,7 @@ $("#pac-input").on("keydown", function search(e) {
     placetoCoord(inputFormat);
 
     //call our placetoCoord function every 15 minutes to get updated weather forecasts
-    setInterval(function(){
+    setInterval(function () {
       placetoCoord(inputFormat);
     }, 1000 * timeDuration);
 
@@ -315,7 +315,7 @@ function initAutocomplete() {
     placetoCoord(clickedInput);
 
     //call the weather api every 15 minutes
-    setInterval(function(){
+    setInterval(function () {
       placetoCoord(clickedInput);
     }, 1000 * timeDuration);
 
@@ -366,7 +366,7 @@ function initAutocomplete() {
 }
 
 //format input string. Get rid of "," and spaces, put a "+" in place of space i.e seattle, wa, us would turn out to be seattle+wa+us
-function stringFormat (str) {
+function stringFormat(str) {
   str = str.split(",");
   str = str.join("+");
   str = str.split(" ");
