@@ -113,13 +113,13 @@ function redSwitch() {
       //"power": "on",
       "color": "red",
       "brightness": 0.1,
-      // "kelvin": 2700,
+      "kelvin": 2700,
       "fast": false,
       "defaults":
-      {
-        "duration": 5.0 // all states will be applied over 5 seconds
+      // {
+      //   "duration": 5.0 // all states will be applied over 5 seconds
 
-      }
+      // }
     }
   });
 } // end of redSwitch
