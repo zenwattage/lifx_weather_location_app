@@ -1,4 +1,3 @@
-// inappropriate comment.
 // Initialize Firebase
 firebase.initializeApp(fbConfig);
 var DB = firebase.database();
