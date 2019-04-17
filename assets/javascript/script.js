@@ -36,7 +36,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     else if (snap.child("lifx/headers").exists()){
       lifxHeaders = snap.child("lifx/headers").val();
       $.ajax({
-        url: 'https://api.lifx.com/v1/lights/all',
+        url: "https://api.lifx.com/v1/lights/all",
         headers: lifxHeaders,
         type: 'GET'
 
@@ -73,12 +73,7 @@ function SetBulb(newBulb) {
 
 
 
-
-
 // COLOR FUNCTIONS
-
-
-
 //onOff switch
 function onOffSwitch() {
   $.ajax({
@@ -86,12 +81,23 @@ function onOffSwitch() {
     url: "https://api.lifx.com/v1/lights/" + lifxBulb + "/toggle",
     headers: lifxHeaders,
     contentType: "application/json",
+<<<<<<< HEAD
+    data: {
+      //"power": "off",
+      "fast": false,
+      "defaults":
+      {
+        "duration": 6.0 // all states will be applied over 6 seconds
+
+      }
+    }
+=======
+>>>>>>> fbf886f69dc8588e336a4ad55626362eecfc339c
   });
 
 } //end of onOff
 
 $("#onoffbutton").on("click", onOffSwitch);
-
 
 //red for hot weather 
 function redSwitch() {
@@ -129,13 +135,12 @@ function greenSwitch() {
     data: JSON.stringify({
       "power": "on",
       "color": "green",
-
       "kelvin": 2700,
       "brightness": 0.1,
       "fast": false,
       "defaults":
       {
-        "duration": 6.0 // all states will be applied over 5 seconds
+        "duration": 6.0 // all states will be applied over 6 seconds
 
       }
     })
@@ -159,7 +164,7 @@ function blueSwitch() {
       "power": "on",
       "color": "blue",
       "brightness": 0.1,
-      "kelvin": 5000,
+      "kelvin": 2700,
       "fast": false,
       "defaults":
       {
@@ -211,7 +216,6 @@ function yellowSwitch() {
     data: JSON.stringify({
       "power": "on",
       "color": "yellow",
-
       "kelvin": 2700,
       "brightness": 0.1,
       "fast": false,
