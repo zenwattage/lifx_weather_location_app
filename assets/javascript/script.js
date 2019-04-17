@@ -100,8 +100,7 @@ function redSwitch() {
     url: lifxStateUrl,
     headers: lifxHeaders,
     contentType: "application/json",
-    processData: false,
-    data: {
+    data: JSON.stringify({
       "power": "on",
       "color": "red",
       "brightness": 0.1,
@@ -112,7 +111,7 @@ function redSwitch() {
       //   "duration": 5.0 // all states will be applied over 5 seconds
 
       // }
-    }
+    })
   });
 } // end of redSwitch
 
