@@ -412,6 +412,7 @@ function placetoCoord(place) {
 
       console.log(cndLat);
 
+      //grab longitude from google map api object
       lng = response.results[0].geometry.location.lng;
 
       var cndLng = lng.toPrecision(5);
