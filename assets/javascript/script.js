@@ -33,7 +33,7 @@ firebase.auth().onAuthStateChanged(function (user) {
       console.log(lifxHeaders);
       //just calling the api to console log some stuff making sure it's working
     }
-    else if (snap.child("lifx/headers").exists()){
+    else if (snap.child("lifx/headers").exists()) {
       lifxHeaders = snap.child("lifx/headers").val();
       $.ajax({
         url: 'https://api.lifx.com/v1/lights/all',
@@ -42,19 +42,22 @@ firebase.auth().onAuthStateChanged(function (user) {
 
       }).then(function (res) {
         console.log(res);
-        for (var i=0; i < res.length; i++){
+        for (var i = 0; i < res.length; i++) {
           console.log("id is: " + res[i].id);
           newOpt = $("<option>").val(res[i].id).text(res[i].id);
           $("#bulb-id").append(newOpt);
           $("#bulb-input-modal").modal("show");
         }
-      });      
+      });
     }
     else {
       $("#token-input-modal").modal("show");
     }
   });
 });
+
+console.log("bulb ID: " + lifxBulb);
+console.log("headers: " + lifxHeaders);
 
 function SetToken(newToken) {
   DB.ref("users/" + uid + "/lifx").set({ headers: { "Authorization": "Bearer " + newToken } });
@@ -83,6 +86,7 @@ function onOffSwitch() {
     url: "https://api.lifx.com/v1/lights/" + lifxBulb + "/toggle",
     headers: lifxHeaders,
     contentType: "application/json",
+    data: {}
   });
 
 } //end of onOff
@@ -98,16 +102,11 @@ function redSwitch() {
     headers: lifxHeaders,
     contentType: "application/json",
     data: JSON.stringify({
-      //power": "on",
+      "power": "on",
       "color": "red",
       "brightness": 0.1,
       "kelvin": 2700,
       "fast": false,
-      "defaults":
-      {
-        "duration": 5.0 // all states will be applied over 5 seconds
-
-      }
     })
   });
 } // end of redSwitch
@@ -130,11 +129,6 @@ function greenSwitch() {
       "kelvin": 2700,
       "brightness": 0.1,
       "fast": false,
-      "defaults":
-      {
-        "duration": 6.0 // all states will be applied over 5 seconds
-
-      }
     })
   });
 
@@ -158,11 +152,6 @@ function blueSwitch() {
       "brightness": 0.1,
       "kelvin": 5000,
       "fast": false,
-      "defaults":
-      {
-        "duration": 5.0 // all states will be applied over 5 seconds
-
-      }
     })
   });
 } //end of blueSwitch
@@ -185,11 +174,6 @@ function purpleSwitch() {
       "kelvin": 2700,
       "brightness": 0.1,
       "fast": false,
-      "defaults":
-      {
-        "duration": 6.0 // all states will be applied over 5 seconds
-
-      }
     })
   });
 
@@ -212,11 +196,6 @@ function yellowSwitch() {
       "kelvin": 2700,
       "brightness": 0.1,
       "fast": false,
-      "defaults":
-      {
-        "duration": 6.0 // all states will be applied over 5 seconds
-
-      }
     })
   });
 
@@ -245,16 +224,9 @@ var seconds = 60;
 var minutes = 15;
 //convert 15 minutes to seconds, use this in our setInterval function
 var timeDuration = seconds * minutes;
-//rain id's
-var rainId = [200, 201, 202, 210, 211, 212, 221, 230, 231, 232,
-  300, 301, 302, 310, 311, 312, 313, 314, 321, 500, 501, 502, 503,
-  504, 511, 520, 521, 522, 531];
 
 //our input field...
 $("#pac-input").on("keydown", function search(e) {
-
-  // Preventing the submit button from trying to submit the form
-  event.preventDefault();
 
   //listen for key press
   if (e.keyCode == 13 || e.button == 0) {
@@ -271,7 +243,7 @@ $("#pac-input").on("keydown", function search(e) {
     placetoCoord(inputFormat);
 
     //call our placetoCoord function every 15 minutes to get updated weather forecasts
-    setInterval(function(){
+    setInterval(function () {
       placetoCoord(inputFormat);
     }, 1000 * timeDuration);
 
@@ -306,7 +278,7 @@ function initAutocomplete() {
 
     console.log(searchBox);
 
-    clickInput = searchBox.gm_accessors_.places.Wc.formattedPrediction;
+    clickInput = searchBox.gm_accessors_.places.Uc.formattedPrediction;
 
     var clickedInput = stringFormat(clickInput);
 
@@ -315,7 +287,7 @@ function initAutocomplete() {
     placetoCoord(clickedInput);
 
     //call the weather api every 15 minutes
-    setInterval(function(){
+    setInterval(function () {
       placetoCoord(clickedInput);
     }, 1000 * timeDuration);
 
@@ -366,7 +338,7 @@ function initAutocomplete() {
 }
 
 //format input string. Get rid of "," and spaces, put a "+" in place of space i.e seattle, wa, us would turn out to be seattle+wa+us
-function stringFormat (str) {
+function stringFormat(str) {
   str = str.split(",");
   str = str.join("+");
   str = str.split(" ");
@@ -374,7 +346,7 @@ function stringFormat (str) {
   return str;
 }
 
- //This function will use the google map api to query user selected input. Then extract coordinates from user input and use the latitude and longitude of selected place and make another ajax call to the open weather map api. From this second query, we are able to get weather information
+//when user enters a place in the search bar and then presses enter. This function will that place and use the google map api to query that place. Then extract coordinates from that place and use the latitude and longitude of selected place and make another ajax call to the open weather map api. From this second query, we are able to get weather information
 function placetoCoord(place) {
 
   //google map api query using user input
@@ -400,7 +372,6 @@ function placetoCoord(place) {
 
       console.log(cndLat);
 
-      //grab longitude from google map api object
       lng = response.results[0].geometry.location.lng;
 
       var cndLng = lng.toPrecision(5);
@@ -425,55 +396,13 @@ function placetoCoord(place) {
 
           console.log(response);
 
-          var temp = response.main.temp;
+          console.log("today's temperature: " + response.main.temp);
 
-          var id = response.weather[0].id;
+          console.log("today's high: " + response.main.temp_max);
 
-          console.log("today's temperature: " + temp);
+          console.log("today's low: " + response.main.temp_min);
 
-          console.log("today's description: " + id);
-
-          if (temp >= 80 && rainId.indexOf(id) < 0) {
-            //call red function
-            console.log("it's hot out");
-            redSwitch();
-          }
-
-          //if temp less than 60 and id is in rainid array...
-          else if (temp < 60 && rainId.indexOf(id) > -1) {
-            //call blue function
-            console.log(rainId.indexOf(id));
-            console.log("it's chilly outside and raining");
-            blueSwitch();
-          }
-
-          //if temp is less than 60 and id is not in rainid array...
-          else if (temp < 60 && rainId.indexOf(id) < 0) {
-            //call purple function
-            console.log(rainId.indexOf(id));
-            console.log("it's chilly outside");
-            purpleSwitch();
-          }
-
-          //if temp is greater than 60, or less than 85 and is not a rainid
-          else if((temp >= 60 && rainId.indexOf(id) < 0) || (temp < 80 && rainId.indexOf(id) < 0)) {
-            //call green function
-            console.log(rainId.indexOf(id));
-            console.log("it's nice outside");
-            greenSwitch();
-          }
-
-          //if temp is greater than 60, or less than 85 and is in rainid
-          else if((temp >= 60 && rainId.indexOf(id) > -1) || (temp < 80 && rainId.indexOf(id) > -1)) {
-            //call blue function
-            console.log(rainId.indexOf(id));
-            console.log("it's nice outside and it's raining");
-            blueSwitch();
-          }
-          
-
-
-
+          console.log("today's description: " + response.weather[0].description);
 
         });
 
