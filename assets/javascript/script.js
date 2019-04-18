@@ -86,6 +86,7 @@ function onOffSwitch() {
     url: "https://api.lifx.com/v1/lights/" + lifxBulb + "/toggle",
     headers: lifxHeaders,
     contentType: "application/json",
+    data: {}
   });
 
 } //end of onOff
@@ -104,8 +105,9 @@ function redSwitch() {
       "power": "on",
       "color": "red",
       "brightness": 0.1,
-      // "kelvin": 2700,
+      "kelvin": 2700,
       "fast": false,
+    })
   });
 } // end of redSwitch
 
