@@ -1,5 +1,4 @@
-# TEAM ORANGE - project1
-
+# Lifx controller app
 # README Boilerplate
 
 A template of README best practices to make your README simple to understand and easy to use. 
