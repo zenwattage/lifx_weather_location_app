@@ -11,7 +11,7 @@ var provider = new firebase.auth.GoogleAuthProvider();
 firebase.auth().signInWithPopup(provider).then(function (result) {
   // This gives you a Google Access Token.
   var token = result.credential.accessToken;
-  console.log(token);
+  // console.log(token);
   // The signed-in user info.
   var user = result.user;
   uid = user.uid;
@@ -29,8 +29,8 @@ firebase.auth().onAuthStateChanged(function (user) {
       lifxBulb = snap.child("lifx/bulb").val();
       lifxHeaders = snap.child("lifx/headers").val();
       lifxStateUrl = "https://api.lifx.com/v1/lights/" + lifxBulb + "/state";
-      console.log(lifxBulb);
-      console.log(lifxHeaders);
+      // console.log(lifxBulb);
+      // console.log(lifxHeaders);
       //just calling the api to console log some stuff making sure it's working
     }
     else if (snap.child("lifx/headers").exists()) {
@@ -67,15 +67,6 @@ function SetBulb(newBulb) {
 
 
 // --- LIFX API CALLS ----
-
-
-
-
-
-// COLOR FUNCTIONS
-
-
-
 //onOff switch
 function onOffSwitch() {
   $.ajax({
@@ -100,7 +91,7 @@ function redSwitch() {
     data: JSON.stringify({
       "power": "on",
       "color": "red",
-      "brightness": 0.1,
+      "brightness": 0.7,
       // "kelvin": 2700,
       "fast": false,
       // "defaults":
@@ -124,11 +115,14 @@ function greenSwitch() {
     headers: lifxHeaders,
     contentType: "application/json",
     data: JSON.stringify({
+      "from_color": "current bulb color",
       "power": "on",
       "color": "green",
-
+      "period": 0.5,
+      "cycles": 5,
+      "persist": true,
       "kelvin": 2700,
-      "brightness": 0.1,
+      "brightness": 0.7,
       "fast": false,
       "defaults":
       {
@@ -155,7 +149,7 @@ function blueSwitch() {
     data: JSON.stringify({
       "power": "on",
       "color": "blue",
-      "brightness": 0.1,
+      "brightness": 0.7,
       "kelvin": 5000,
       "fast": false,
       "defaults":
@@ -183,7 +177,7 @@ function purpleSwitch() {
       "color": "purple",
 
       "kelvin": 2700,
-      "brightness": 0.1,
+      "brightness": 0.7,
       "fast": false,
       "defaults":
       {
@@ -210,7 +204,7 @@ function yellowSwitch() {
       "color": "yellow",
 
       "kelvin": 2700,
-      "brightness": 0.1,
+      "brightness": 0.7,
       "fast": false,
       "defaults":
       {
@@ -223,12 +217,6 @@ function yellowSwitch() {
 } //end of yellow
 
 $("#yellowbutton").on("click", yellowSwitch);
-
-
-
-
-
-
 // ----- end of LIFX ----
 
 
@@ -295,15 +283,19 @@ function initAutocomplete() {
   });
 
   var markers = [];
-  // Listen for the event fired when the user selects a prediction and retrieve
-  // more details for that place.
-  searchBox.addListener('places_changed', function () {
 
+  searchBox.addListener('places_changed', function () {
     var places = searchBox.getPlaces();
 
-    console.log(searchBox);
+    console.log(places);
 
-    clickInput = searchBox.gm_accessors_.places.Wc.formattedPrediction;
+    if (places.length > 0) {
+      var clickInput = places[0].formatted_address;
+      console.log(clickInput);
+    } else {
+      console.log("No places found");
+      return;
+    }
 
     var clickedInput = stringFormat(clickInput);
 
@@ -315,7 +307,6 @@ function initAutocomplete() {
     setInterval(function () {
       placetoCoord(clickedInput);
     }, 1000 * timeDuration);
-
 
     if (places.length == 0) {
       return;
@@ -371,7 +362,7 @@ function stringFormat(str) {
   return str;
 }
 
- //This function will use the google map api to query user selected input. Then extract coordinates from user input and use the latitude and longitude of selected place and make another ajax call to the open weather map api. From this second query, we are able to get weather information
+//This function will use the google map api to query user selected input. Then extract coordinates from user input and use the latitude and longitude of selected place and make another ajax call to the open weather map api. From this second query, we are able to get weather information
 function placetoCoord(place) {
 
   //google map api query using user input
@@ -427,6 +418,7 @@ function placetoCoord(place) {
           var id = response.weather[0].id;
 
           console.log("today's temperature: " + temp);
+          console.log("today's description: " + response.weather[0].description);
 
           console.log("today's description: " + id);
 
@@ -453,7 +445,7 @@ function placetoCoord(place) {
           }
 
           //if temp is greater than 60, or less than 85 and is not a rainid
-          else if((temp >= 60 && rainId.indexOf(id) < 0) || (temp < 80 && rainId.indexOf(id) < 0)) {
+          else if ((temp >= 60 && rainId.indexOf(id) < 0) || (temp < 80 && rainId.indexOf(id) < 0)) {
             //call green function
             console.log(rainId.indexOf(id));
             console.log("it's nice outside");
@@ -461,13 +453,13 @@ function placetoCoord(place) {
           }
 
           //if temp is greater than 60, or less than 85 and is in rainid
-          else if((temp >= 60 && rainId.indexOf(id) > -1) || (temp < 80 && rainId.indexOf(id) > -1)) {
+          else if ((temp >= 60 && rainId.indexOf(id) > -1) || (temp < 80 && rainId.indexOf(id) > -1)) {
             //call blue function
             console.log(rainId.indexOf(id));
             console.log("it's nice outside and it's raining");
             blueSwitch();
           }
-          
+
 
 
 

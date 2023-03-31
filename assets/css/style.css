@@ -56,48 +56,76 @@ margin: 50px;
     0%{background-position:0% 75%}
     50%{background-position:100% 26%}
     100%{background-position:0% 75%}
-} */ 
-
+} */
 
 #map {
-        height: 100%;
-        width: 80%;
-        margin: auto;
+  height: 100%;
+  width: 80%;
+  margin: auto;
 }
 
-    /* Optional: Makes the sample page fill the window. */
- html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
+/* Optional: Makes the sample page fill the window. */
+html,
+body {
+  background: #5cb85c;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
+
+#colorbuttonsdiv {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  padding: 10px;
+  font-size: large;
+  background-color: rgb(75, 177, 245);
+  border: #4d90fe 2px solid;
+}
+
 .controls {
-    background-color: #fff;
-    border-radius: 2px;
-    border: 1px solid transparent;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    box-sizing: border-box;
-    font-family: Roboto;
-    font-size: 15px;
-    font-weight: 300;
-    height: 29px;
-    margin-left: 17px;
-    margin-top: 10px;
-    outline: none;
-    padding: 0 11px 0 13px;
-    text-overflow: ellipsis;
-    width: 400px;
+  background-color: #fff;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  height: 29px;
+  margin-left: 17px;
+  margin-top: 10px;
+  outline: none;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 400px;
 }
 
 .controls:focus {
-    border-color: #4d90fe;
+  border-color: #4d90fe;
 }
 .title {
-    font-weight: bold;
+  font-weight: bold;
 }
 #infowindow-content {
-    display: none;
+  display: none;
 }
 #map #infowindow-content {
-    display: inline;
+  display: inline;
+}
+
+.modal-header,
+.modal-body,
+.modal-footer {
+  background-color: #5cb85c;
+  color: white;
+  text-align: center;
+  font-size: 30px;
+}
+
+#token-input {
+  background-color: #4ac1f8b2;
+  color: white;
+  text-align: center;
+  font-size: 30px;
 }
